@@ -68,7 +68,7 @@ Ext.application({
 				now.removeDevice = function(deviceName) {
 					devices[deviceName] = false;
 					console.log("Request to Remove Device: "+deviceName);
-					for(var i = 4; i < Ext.getCmp('config-panel').getItems().length; i++ ) {
+					for(var i = 5; i < Ext.getCmp('config-panel').getItems().length; i++ ) {
 						if(Ext.getCmp('config-panel').getAt(i).getName() == deviceName) {
 							Ext.getCmp('config-panel').getAt(i).destroy()
 							console.log("Device Removed: "+deviceName);

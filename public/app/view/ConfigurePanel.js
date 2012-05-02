@@ -1,7 +1,7 @@
 Ext.define('IGLoo.view.ConfigurePanel',{
     extend:'Ext.Panel',
 	xtype:'configurepanel',
-    requires: ['IGLoo.view.DeviceIcon'],
+    requires: ['IGLoo.view.DeviceIcon', 'IGLoo.view.SessionPanel'],
 		
     config:{
 
@@ -10,11 +10,6 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 		layout:'hbox',
 		displayField: 'title',
 		id: 'config-panel',
-		listeners: {
-			newUserConnect: function() {
-          		console.log("New User Connected");
-        	}
-		},
 		items:[
 			{
 				xtype:'panel',
@@ -37,6 +32,17 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 						flex:1
 					}
 				]
+			},
+			{
+				xtype: 'panel',
+				id: 'sesssion-details',	
+				html: 'This will be the session detail',
+				modal: true,
+				hideOnMaskTap: true,
+				centered: true,
+				hidden: true,
+				width: '50%',
+				height: '50%'
 			},
 			{
 				xtype: 'titlebar',
@@ -76,18 +82,61 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 				flex:1
 			},
 			{
-				xtype:'panel',
-				layout:'fit',
+				xtype:'container',
+				layout:
+				{
+					type: 'vbox',
+					align: 'center'
+				},
 				id:'sessionpanel',
-				html:'<h1>Sessions</h1><hr/>',
+				//html:'<h1>Sessions</h1><hr/>',
 				style:[
 					'border:1px solid #acacac;',
 					'border-radius:25px;',
 					'margin:20px;',
 					'text-align:center;'
 				].join(''),
-				
-				flex:1
+				flex:1,
+				items: [
+					{	
+						xtype: 'container',
+						layout: 'fit',
+						html:'<h1>Sessions</h1>',
+						height:'10%',
+						width: '95%',
+						style:
+						[
+							'border:1px solid #acacac;',
+							'border-radius:25px;',
+							'text-align:center;',
+						].join(''),
+						flex: 1
+					},		
+					{
+						xtype: 'sessionPanel',
+						sessionsName: "session 1",
+						style:
+						[
+							'border:1px solid #acacac;',
+							'border-radius:25px;',
+							'margin:20px;',
+							'text-align:center;',
+							'background-color:red'
+						].join('')
+					},
+					{
+						xtype: 'sessionPanel',
+						sessionsName: "session 2",
+						style:
+						[
+							'border:1px solid #acacac;',
+							'border-radius:25px;',
+							'margin:20px;',
+							'text-align:center;',
+							'background-color:#00ff00'
+						].join('')
+					}
+				]
 			}
 		]
     }
