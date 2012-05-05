@@ -10,6 +10,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 		layout:'hbox',
 		displayField: 'title',
 		id: 'config-panel',
+		scrollable:true,
 		items:[
 			{
 				xtype:'panel',

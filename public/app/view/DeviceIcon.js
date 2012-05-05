@@ -32,6 +32,8 @@ Ext.define('IGLoo.view.DeviceIcon', {
 			listeners:{
 				dragstart:function(){
 					console.log('drag started');
+					var configpanel = Ext.getCmp('config-panel');
+					configpanel.setScrollable(false);
 				},
 				drag:function(v,e,ox,oy){
 					console.log(e.pageX + ' ' + e.pageY);
@@ -52,6 +54,8 @@ Ext.define('IGLoo.view.DeviceIcon', {
 				dragend:function(v,e,ox,oy){
 					var sessionpanel = $('#sessionpanel');
 					sessionpanel.css('border','1px solid #acacac');
+					var configpanel = Ext.getCmp('config-panel');
+					configpanel.setScrollable(true);
 					/*
 					var sessionpanel = $('#sessionpanel');
 					var offset = sessionpanel.offset();
