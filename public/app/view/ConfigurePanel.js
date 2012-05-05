@@ -136,7 +136,19 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 							'text-align:center;',
 							'background-color:#00ff00'
 						].join('')
-					}
+					},
+					{
+						xtype: 'sessionPanel',
+						sessionsName: "session 3",
+						style:
+						[
+							'border:1px solid #acacac;',
+							'border-radius:25px;',
+							'margin:20px;',
+							'text-align:center;',
+							'background-color:red'
+						].join('')
+					},
 				]
 			}
 		]
