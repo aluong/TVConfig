@@ -24,6 +24,9 @@ Ext.application({
 	launch: function () {
 	
 	var devices = {}
+	//make sessions under IGLoo namespace
+	IGLoo.sessions = {};
+	IGLoo.sessions.nextid = 0;
 	
 	Ext.Msg.prompt(
 		'Device Connected!',
