@@ -4,6 +4,7 @@ Ext.define('IGLoo.view.DeviceIcon', {
     
     config:{
 		cls:'deviceicon',
+		floating:true,
 		centered:true,
 		width:'10%',
 		name: "Current Device",
@@ -14,11 +15,15 @@ Ext.define('IGLoo.view.DeviceIcon', {
 					"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
 					"<p>DEFAULT NAME/p>"
 				].join(''),
-				zindex:1
+				zindex:999
 			}
 		],
 		style:[
-			'margin-top:-30%;',
+//			'position: fixed;',
+//			'top:-100px;',
+//			'left:-100px;',
+			'margin-top:-50%;',
+			'margin-bottom:-20%;',
 //			'margin-left:10%;',
 			'font-size:60%;',
 			'text-align:center;',

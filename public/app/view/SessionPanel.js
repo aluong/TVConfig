@@ -12,8 +12,19 @@ Ext.define('IGLoo.view.SessionPanel', {
 			'border-radius:25px;',
 			'margin:20px;',
 			'text-align:center;'
-		].join('')
+		].join(''),
+		items:[
+			{
+				xtype:'button',
+				text:'details',
+				style:[
+					'height:20px;',
+					'width:100px;'
+				].join('')
+			}
+		]
 	},
+	
 
 /*	//will be added back soon
 	initialize: function () {      
