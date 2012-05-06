@@ -43,40 +43,27 @@ Ext.define('IGLoo.view.DeviceIcon', {
 					if(sessionpanels.length === 0)
 						return;
 					
-					var i = 0;
-					for(; i < sessionpanels.length; i++){
-						var offset = sessionpanels.offset();
+					sessionpanels.each(function(){
+						var offset = $(this).offset();
 						var tlx = offset.left;
 						var tly = offset.top;
-						var brx = tlx + sessionpanels.width();
-						var bry = tly + sessionpanels.height();
+						var brx = tlx + $(this).width();
+						var bry = tly + $(this).height();
 						if(e.pageX > tlx && e.pageX < brx && e.pageY > tly && e.pageY < bry)
-							sessionpanels.css('border','2px dashed #000');
+							$(this).css('border','2px dashed #000');
 						else
-							sessionpanels.css('border','1px solid #acacac');
-					}
+							$(this).css('border','1px solid #acacac');
+					});
 					
 				},
 				dragend:function(v,e,ox,oy){
 					var sessionpanels = $('.sessionpanel');
-					sessionpanels.css('border','1px solid #acacac');
+					sessionpanels.each(function(){
+						$(this).css('border','1px solid #acacac');
+					});
+						
 					var configpanel = Ext.getCmp('config-panel');
 					configpanel.setScrollable(true);
-					/*
-					var sessionpanel = $('#sessionpanel');
-					var offset = sessionpanel.offset();
-					var tlx = offset.left;
-					var tly = offset.top;
-					var brx = tlx + sessionpanel.width();
-					var bry = tly + sessionpanel.height();
-					*/
-					/*
-					if(e.pageX > tlx && e.pageX < brx && e.pageY > tly && e.pageY < bry){
-						//drop succeeded
-						var deviceicon = $('#deviceicon');
-						deviceicon.offset({left:tlx, top:tly});
-					}
-					*/
 				}
 			}
 		}
