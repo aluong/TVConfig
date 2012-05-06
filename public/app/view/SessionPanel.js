@@ -1,12 +1,21 @@
 Ext.define('IGLoo.view.SessionPanel', {
 	extend: 'Ext.Panel',
-	alias: 'widget.sessionPanel',
+	//alias: 'widget.sessionPanel',
+	xtype:'sessionpanel',
 	config: {
 		layout: 'fit',
-		width: '95%',
-		sessionsName: "generic session",
-		flex: 1
+		cls:'sessionpanel',
+		height:'200px',
+		html:'<h1>Sessions</h1><hr/>',
+		style:[
+			'border:1px solid #acacac;',
+			'border-radius:25px;',
+			'margin:20px;',
+			'text-align:center;'
+		].join('')
 	},
+
+/*	//will be added back soon
 	initialize: function () {      
 		this.callParent();                                                     
 		this.element.on ({
@@ -16,6 +25,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 		
 		this.setHtml(['<h1>',this.getSessionsName(),'</h1><hr/>'].join(''));
 	},
+
 	tappedSessionsPanel: function(e) {
 		var sessionDetails = Ext.getCmp('sesssion-details');
 		if(sessionDetails.isHidden()) {
@@ -25,4 +35,5 @@ Ext.define('IGLoo.view.SessionPanel', {
 		else
 			sessionDetails.hide();
 	},
+*/	
 });

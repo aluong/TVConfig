@@ -7,7 +7,7 @@ Ext.Loader.setPath({
 Ext.application({
 	name: 'IGLoo',
 
-	views: ['DeviceIcon','VideoPanel','ConfigurePanel','MainPanel'],
+	views: ['DeviceIcon','VideoPanel','ConfigurePanel','MainPanel', 'SessionPanel'],
 	controllers:['ConfigureController'],
 	
 	

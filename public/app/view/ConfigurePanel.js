@@ -30,6 +30,16 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 					{
 						xtype:'button',
 						text:'Create a New Session',
+						listeners:{
+							tap:function(){
+								Ext.getCmp('session').add({
+									xtype:'sessionpanel',
+									id:'sessionbox'+IGLoo.sessions.nextid,
+								});
+								IGLoo.sessions.nextid += 1;
+								Ext.getCmp('addpanel').hide();
+							}
+						},
 						flex:1
 					}
 				]
@@ -83,73 +93,10 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 				flex:1
 			},
 			{
-				xtype:'container',
-				layout:
-				{
-					type: 'vbox',
-					align: 'center'
-				},
-				id:'sessionpanel',
-				//html:'<h1>Sessions</h1><hr/>',
-				style:[
-					'border:1px solid #acacac;',
-					'border-radius:25px;',
-					'margin:20px;',
-					'text-align:center;'
-				].join(''),
-				flex:1,
-				items: [
-					{	
-						xtype: 'container',
-						layout: 'fit',
-						html:'<h1>Sessions</h1>',
-						height:'10%',
-						width: '95%',
-						style:
-						[
-							'border:1px solid #acacac;',
-							'border-radius:25px;',
-							'text-align:center;',
-						].join(''),
-						flex: 1
-					},		
-					{
-						xtype: 'sessionPanel',
-						sessionsName: "session 1",
-						style:
-						[
-							'border:1px solid #acacac;',
-							'border-radius:25px;',
-							'margin:20px;',
-							'text-align:center;',
-							'background-color:red'
-						].join('')
-					},
-					{
-						xtype: 'sessionPanel',
-						sessionsName: "session 2",
-						style:
-						[
-							'border:1px solid #acacac;',
-							'border-radius:25px;',
-							'margin:20px;',
-							'text-align:center;',
-							'background-color:#00ff00'
-						].join('')
-					},
-					{
-						xtype: 'sessionPanel',
-						sessionsName: "session 3",
-						style:
-						[
-							'border:1px solid #acacac;',
-							'border-radius:25px;',
-							'margin:20px;',
-							'text-align:center;',
-							'background-color:red'
-						].join('')
-					},
-				]
+				xtype:'panel',
+				layout:'vbox',
+				id:'session',	
+				flex:1
 			}
 		]
     }

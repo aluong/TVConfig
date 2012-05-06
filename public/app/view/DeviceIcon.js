@@ -39,21 +39,27 @@ Ext.define('IGLoo.view.DeviceIcon', {
 					console.log(e.pageX + ' ' + e.pageY);
 					//prepare the drop effect
 					//get sessionpanel position
-					var sessionpanel = $('#sessionpanel');
-					var offset = sessionpanel.offset();
-					var tlx = offset.left;
-					var tly = offset.top;
-					var brx = tlx + sessionpanel.width();
-					var bry = tly + sessionpanel.height();
-					if(e.pageX > tlx && e.pageX < brx && e.pageY > tly && e.pageY < bry)
-						sessionpanel.css('border','2px dashed #000');
-					else
-						sessionpanel.css('border','1px solid #acacac');
+					var sessionpanels = $('.sessionpanel');
+					if(sessionpanels.length === 0)
+						return;
+					
+					var i = 0;
+					for(; i < sessionpanels.length; i++){
+						var offset = sessionpanels.offset();
+						var tlx = offset.left;
+						var tly = offset.top;
+						var brx = tlx + sessionpanels.width();
+						var bry = tly + sessionpanels.height();
+						if(e.pageX > tlx && e.pageX < brx && e.pageY > tly && e.pageY < bry)
+							sessionpanels.css('border','2px dashed #000');
+						else
+							sessionpanels.css('border','1px solid #acacac');
+					}
 					
 				},
 				dragend:function(v,e,ox,oy){
-					var sessionpanel = $('#sessionpanel');
-					sessionpanel.css('border','1px solid #acacac');
+					var sessionpanels = $('.sessionpanel');
+					sessionpanels.css('border','1px solid #acacac');
 					var configpanel = Ext.getCmp('config-panel');
 					configpanel.setScrollable(true);
 					/*
