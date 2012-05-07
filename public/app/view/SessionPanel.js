@@ -20,13 +20,15 @@ Ext.define('IGLoo.view.SessionPanel', {
 				style:[
 					'height:20px;',
 					'width:100px;'
-				].join('')
+				].join(''),
+				handler: function(){
+					//show detail panel here
+				}
 			}
 		]
 	},
 	
-
-/*	//will be added back soon
+/*
 	initialize: function () {      
 		this.callParent();                                                     
 		this.element.on ({
@@ -46,5 +48,5 @@ Ext.define('IGLoo.view.SessionPanel', {
 		else
 			sessionDetails.hide();
 	},
-*/	
+*/
 });
