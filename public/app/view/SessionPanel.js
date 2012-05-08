@@ -41,7 +41,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 	tappedSessionsPanel: function(e) {
 		var sessionDetails = Ext.getCmp('sesssion-details');
 		if(sessionDetails.isHidden()) {
-			sessionDetails.setHtml('This will be the session detail for ' + this.sessionName);//+this.getSessionsName());
+			sessionDetails.setHtml('This will be the session detail for ' + this.getSessionName());//+this.getSessionsName());
 			sessionDetails.show('pop');
 		}
 		else
