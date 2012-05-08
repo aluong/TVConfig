@@ -21,15 +21,12 @@ Ext.define('IGLoo.view.SessionPanel', {
 					'height:20px;',
 					'width:100px;'
 				].join(''),
-				handler: function(){
-					//show detail panel here
-				}
 			}
 		]
 	},
 	
-/*
 	initialize: function () {      
+		/*
 		this.callParent();                                                     
 		this.element.on ({
 			scope: this,
@@ -37,16 +34,17 @@ Ext.define('IGLoo.view.SessionPanel', {
 		});
 		
 		this.setHtml(['<h1>',this.getSessionsName(),'</h1><hr/>'].join(''));
+		*/
+		this.items.get(0).addListener('tap', this.tappedSessionsPanel);
 	},
 
 	tappedSessionsPanel: function(e) {
 		var sessionDetails = Ext.getCmp('sesssion-details');
 		if(sessionDetails.isHidden()) {
-			sessionDetails.setHtml('This will be the session detail for '+this.getSessionsName());
+			sessionDetails.setHtml('This will be the session detail for ' + this.sessionName);//+this.getSessionsName());
 			sessionDetails.show('pop');
 		}
 		else
 			sessionDetails.hide();
 	},
-*/
 });

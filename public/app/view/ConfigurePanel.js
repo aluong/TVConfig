@@ -35,6 +35,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 								Ext.getCmp('session').add({
 									xtype:'sessionpanel',
 									id:'sessionbox'+IGLoo.sessions.nextid,
+									sessionName:'sdsd'
 								});
 								IGLoo.sessions.nextid += 1;
 								Ext.getCmp('addpanel').hide();
