@@ -33,7 +33,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 						listeners:{
 							tap:function(){
 								Ext.getCmp('session').add({
-									xtype:'sessionpanel',
+									xtype:'sessionPanel',
 									id:'sessionbox'+IGLoo.sessions.nextid,
 									sessionName:'sdsd'
 								});
