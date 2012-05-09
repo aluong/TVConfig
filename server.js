@@ -23,7 +23,9 @@ console.log('Server Listening on Port: ' + 1111);
 var everyone = now.initialize(server);
 
 // List of devices registered to the server
-var devices = {}
+var devices = {};
+// List of sessions registered to the server
+var sessions = {};
 
 everyone.now.loaded = function(name) {
 	console.log(name+" connected");

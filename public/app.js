@@ -17,7 +17,7 @@ Ext.application({
 
 	launch: function () {
 	
-	var devices = {}
+	var devices = {};
 	//make sessions under IGLoo namespace
 	IGLoo.sessions = {};
 	IGLoo.sessions.nextid = 0;
@@ -33,7 +33,8 @@ Ext.application({
 			now.ready(function(){
 				
 				// Add user's name
-				now.name = name
+				now.name = name;
+				IGLoo.name = name;
 				
 				// Adds device to device list and creates new item
 				now.addDevice = function(deviceName) {
