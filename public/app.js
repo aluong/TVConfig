@@ -73,6 +73,14 @@ Ext.application({
 						}
 					}
 				}
+
+				//add sessions
+				now.receiveSession = function(session_id){
+					Ext.getCmp('session').add({
+						xtype:'sessionPanel',
+						id:session_id
+					});
+				};
 				
 				now.loaded(name);
 			});

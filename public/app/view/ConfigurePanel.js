@@ -32,11 +32,15 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 						text:'Create a New Session',
 						listeners:{
 							tap:function(){
+								/*
 								Ext.getCmp('session').add({
 									xtype:'sessionPanel',
 									id:'sessionbox'+IGLoo.name+IGLoo.sessions.nextid,
-									sessionName:'sdsd'
 								});
+								*/
+								var sid = 'sessionbox'+IGLoo.name+IGLoo.sessions.nextid;
+								now.addSession(sid);
+
 								IGLoo.sessions.nextid += 1;
 								Ext.getCmp('addpanel').hide();
 							}

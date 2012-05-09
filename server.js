@@ -27,6 +27,19 @@ var devices = {};
 // List of sessions registered to the server
 var sessions = {};
 
+everyone.now.addSession = function(sid){
+	console.log('session: ' + sid + ' added');
+	sessions[sid] = true;
+	everyone.now.receiveSession(sid);
+
+	for(var session in sessions){
+		if(sessions[session]){
+			console.log("sessions:" + session);
+			this.now.receiveSession(session);
+		}
+	}
+};
+
 everyone.now.loaded = function(name) {
 	console.log(name+" connected");
 	
