@@ -1,15 +1,9 @@
-//<debug>
-Ext.Loader.setPath({
-    'Ext': 'sdk/src'
-});
-//</debug>
-
 Ext.application({
 	name: 'IGLoo',
 
 	views: ['DeviceIcon','VideoPanel','ConfigurePanel','MainPanel', 'SessionPanel'],
 	controllers:['ConfigureController'],
-	
+	requires: ['Ext.MessageBox'],
 	
 	icon: {
         57: 'resources/icons/Icon.png',
