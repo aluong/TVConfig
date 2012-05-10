@@ -80,8 +80,16 @@ Ext.application({
 						xtype:'sessionPanel',
 						id:session_id
 					});
+					IGLoo.sessions[session_id] = true;
 				};
-				
+
+				//remove session
+				/*
+				now.removeSession = function(sid){
+					IGLoo.sessions[sid] = false;
+					Ext.getCmp(sid).destroy();
+				};
+				*/
 				now.loaded(name);
 			});
 		},
