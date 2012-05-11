@@ -2,7 +2,7 @@ Ext.application({
 	name: 'IGLoo',
 
 	views: ['DeviceIcon','VideoPanel','ConfigurePanel','MainPanel', 'SessionPanel'],
-	controllers:['ConfigureController'],
+	controllers:['ConfigureController', 'DevicesController'],
 	requires: ['Ext.MessageBox'],
 	
 	icon: {
@@ -44,6 +44,7 @@ Ext.application({
 							configPanel.add( {
 								xclass: 'IGLoo.view.DeviceIcon',
 								name: deviceName,
+								id: 'device-'+deviceName,
 								items:
 									[
 										{
@@ -68,7 +69,7 @@ Ext.application({
 						console.log("Request to Remove Device: "+deviceName);
 						IGLoo.devices[deviceName] = false;
 						var configPanel = Ext.getCmp('config-panel');
-						for(var i = 4; i < configPanel.getItems().length-1; i++ ) {
+						for(var i = 5; i < configPanel.getItems().length; i++ ) {
 							if(configPanel.getAt(i).getName() == deviceName) {
 								configPanel.getAt(i).destroy()
 								console.log("Device Removed: "+deviceName);
