@@ -43,7 +43,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 						// Found a session with the device
 						if(!sessionRegion.isOutOfBound(dragPoint)) {
 							console.log("Device: "+deviceId+" Moved To Session: "+session.getId());
-							Ext.getCmp(deviceId).getDraggable().setOffset(sessionRegion.left,sessionRegion.top-80);
+							Ext.getCmp(deviceId).getDraggable().setOffset(sessionRegion.left,sessionRegion.top);
 							deviceSession = session.getId();
 							
 							// Add Device to Session

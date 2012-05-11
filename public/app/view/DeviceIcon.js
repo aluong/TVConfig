@@ -7,10 +7,10 @@ Ext.define('IGLoo.view.DeviceIcon', {
 	},
     config:{
 		cls:'deviceicon',
-		centered:true,
+		left: 0,
+		top:0,
 		width:'10%',
 		name: "Current Device",
-//		height:'25%',
 		items:[
 			{
 				html:[
@@ -20,12 +20,6 @@ Ext.define('IGLoo.view.DeviceIcon', {
 			}
 		],
 		style:[
-//			'position: fixed;',
-//			'top:-100px;',
-//			'left:-100px;',
-			'margin-top:-50%;',
-			'margin-bottom:-20%;',
-//			'margin-left:10%;',
 			'font-size:60%;',
 			'text-align:center;',
 			'background-color:transparent;'
