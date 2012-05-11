@@ -22,9 +22,11 @@ console.log('Server Listening on Port: ' + 1111);
 // Setting up NowJS
 var everyone = now.initialize(server);
 
-// List of devices registered to the server
-// Maps a Device to a Client
+// List of devices registered to the server (Device -> ClientId)
 var devices = {};
+
+// List of users registered to the server (ClientId -> Device)
+var users = {};
 
 // List of sessions registered to the server
 var sessions = {};
@@ -57,7 +59,7 @@ everyone.now.serverLoadSessions = function() {
 	for(var session in sessions){
 		if(sessions[session]){
 			console.log("loading sessions: " + session);
-			this.now.clientReceiveSession(session);
+			this.now.clientAddSession(session);
 		}
 	}
 }
@@ -84,6 +86,7 @@ everyone.now.serverAddDeviceToSession = function(did, sid) {
 everyone.now.serverRemoveDeviceFromSession = function(did, sid) {
 	// Device was never in a session
 	if(device2Session[devices[did]] == null) {
+		console.log(did+" was never in a session.");
 		return;
 	}
 	// If sid is not specified, remove device from previous session
@@ -101,11 +104,26 @@ everyone.now.serverRemoveDeviceFromSession = function(did, sid) {
 	console.log('Device: '+did+' removed from Session: '+sid+ " with ClientId: "+devices[did]);	
 }
 
+everyone.now.serverGetDevicesFromSession = function(sid) {
+	var targetClient = this;
+	now.getGroup(sid).getUsers(function (usersList) { 
+		var listOfDevices = [];
+		for (var i = 0; i < usersList.length; i++) {
+			listOfDevices.push(users[usersList[i]]);
+		}
+		console.log("Sending list: "+listOfDevices);
+		targetClient.now.clientGetDevicesFromSession(listOfDevices);
+	});
+}
+
 everyone.now.serverAddDevice = function(name) {
 	console.log(name+" connected");
 	
 	// Update Server's devices lists
 	devices[name] = this.user.clientId;
+	
+	// Update Server's user lists
+	users[this.user.clientId] = name;
 	
 	// Update all current user's devices
 	everyone.now.clientAddDevice(name);
@@ -126,6 +144,7 @@ everyone.disconnected(function() {
 	
 	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
 		everyone.now.clientRemoveDevice(this.now.name);
+		everyone.now.serverRemoveDeviceFromSession(this.now.name);
 		devices[this.now.name] = false;
 	}
 }); 

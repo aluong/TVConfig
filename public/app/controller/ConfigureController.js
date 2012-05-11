@@ -13,9 +13,16 @@ Ext.define('IGLoo.controller.ConfigureController',{
     
     config: {
         refs: {
+        	sessionDetails: '#session-details',
             deleteSessionsButton: '#session-details button'
         },
         control: {
+        	sessionDetails: {
+        		show: function() {
+        			var sessionDetailsPanel = Ext.getCmp('session-details');
+        			now.serverGetDevicesFromSession(sessionDetailsPanel.currentSession);
+        		}
+        	},
             deleteSessionsButton: {
             	tap: function() {
             		var sessionDetailsPanel = Ext.getCmp('session-details');
@@ -29,3 +36,14 @@ Ext.define('IGLoo.controller.ConfigureController',{
         }
     }
 });
+
+// Callback form of serverGetDevicesFromSession obtaining 
+// listOfDevices from a particular session
+now.clientGetDevicesFromSession = function(listOfDevices) {
+	var sessionDetailsPanel = Ext.getCmp('session-details');
+
+	// very simple display
+	sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<p>Current Devices:');
+	for(var name in listOfDevices)
+		sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<br>'+listOfDevices[name]);
+}
