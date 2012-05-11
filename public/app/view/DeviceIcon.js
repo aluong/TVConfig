@@ -16,8 +16,7 @@ Ext.define('IGLoo.view.DeviceIcon', {
 				html:[
 					"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
 					"<p>DEFAULT NAME/p>"
-				].join(''),
-				zindex:0
+				].join('')
 			}
 		],
 		style:[

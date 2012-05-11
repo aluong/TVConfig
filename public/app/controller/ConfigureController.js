@@ -13,10 +13,19 @@ Ext.define('IGLoo.controller.ConfigureController',{
     
     config: {
         refs: {
-            device: '#deviceicon'
+            deleteSessionsButton: '#session-details button'
         },
         control: {
-            
+            deleteSessionsButton: {
+            	tap: function() {
+            		var sessionDetailsPanel = Ext.getCmp('session-details');
+            		console.log('Deleting Session: '+sessionDetailsPanel.currentSession);
+            		
+            		
+            		now.serverDeleteSession(sessionDetailsPanel.currentSession);
+            		sessionDetailsPanel.hide();
+            	}
+            }
         }
     }
 });

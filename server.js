@@ -38,6 +38,15 @@ everyone.now.serverAddSession = function(sid){
 
 };
 
+everyone.now.serverDeleteSession = function(sid) {
+	console.log('session: ' + sid + ' deleted');
+	// Update Server's sessions lists
+	sessions[sid] = false;
+	
+	// Update all current user's sessions
+	everyone.now.clientDeleteSession(sid);
+}
+
 everyone.now.serverLoadSessions = function() {
 	// Load all current sessions for the new client
 	for(var session in sessions){

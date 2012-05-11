@@ -21,9 +21,10 @@ Ext.define('IGLoo.view.SessionPanel', {
 					'width:100px;'
 				].join(''),
 				handler: function() {
-					var sessionDetails = Ext.getCmp('sesssion-details');
+					var sessionDetails = Ext.getCmp('session-details');
 					if(sessionDetails.isHidden()) {
 						sessionDetails.setHtml('This will be the session detail for ' + this.getParent().getId());
+						sessionDetails.currentSession = this.getParent().getId();
 						sessionDetails.show('pop');
 					}
 					else

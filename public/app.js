@@ -78,7 +78,7 @@ Ext.application({
 					}
 	
 					// Adds Sessions
-					now.clientReceiveSession = function(session_id){
+					now.clientReceiveSession = function(session_id) {
 						Ext.getCmp('sessions-panel').add({
 							xtype:'sessionPanel',
 							id:session_id
@@ -86,13 +86,13 @@ Ext.application({
 						IGLoo.sessions[session_id] = true;
 					};
 	
-					//remove session
-					/*
-					now.removeSession = function(sid){
-						IGLoo.sessions[sid] = false;
-						Ext.getCmp(sid).destroy();
+					// Delete Session
+					now.clientDeleteSession = function(session_id) {
+						IGLoo.sessions[session_id] = false;
+						Ext.getCmp(session_id).destroy();
+						Ext.getCmp('session-details').hide();
 					};
-					*/
+					
 					
 					// Add Device to Server and then load all current devices and sessions
 					now.serverAddDevice(name);
