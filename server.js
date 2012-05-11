@@ -27,42 +27,52 @@ var devices = {};
 // List of sessions registered to the server
 var sessions = {};
 
-everyone.now.addSession = function(sid){
+everyone.now.serverAddSession = function(sid){
 	console.log('session: ' + sid + ' added');
+	
+	// Update Server's sessions lists
 	sessions[sid] = true;
-	everyone.now.receiveSession(sid);
+	
+	// Update all current user's sessions
+	everyone.now.clientReceiveSession(sid);
 
-	for(var session in sessions){
-		if(sessions[session]){
-			console.log("sessions:" + session);
-			this.now.receiveSession(session);
-		}
-	}
 };
 
-everyone.now.loaded = function(name) {
+everyone.now.serverLoadSessions = function() {
+	// Load all current sessions for the new client
+	for(var session in sessions){
+		if(sessions[session]){
+			console.log("loading sessions: " + session);
+			this.now.clientReceiveSession(session);
+		}
+	}
+}
+
+everyone.now.serverAddDevice = function(name) {
 	console.log(name+" connected");
 	
 	// Update Server's devices lists
 	devices[name] = true
 	
 	// Update all current user's devices
-	everyone.now.addDevice(name);
-	
-	// Load all current devices
+	everyone.now.clientAddDevice(name);
+};
+
+everyone.now.serverLoadDevices = function() {
+	// Load all current devices for the new client
 	for(var device in devices) {
 		if(devices[device]) {
-			console.log("device: "+device);
-			this.now.addDevice(device);
+			console.log("loading device: "+device);
+			this.now.clientAddDevice(device);
 		}
 	}
-};
+}
 
 everyone.disconnected(function() {
 	console.log(this.now.name+" disconnected")
 	
-	if(typeof(everyone.now.removeDevice) != "undefined") {
-		everyone.now.removeDevice(this.now.name);
+	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
+		everyone.now.clientRemoveDevice(this.now.name);
 		devices[this.now.name] = false;
 	}
-}) 
+}); 

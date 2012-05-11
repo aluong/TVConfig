@@ -14,12 +14,11 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 		items:[
 			{
 				xtype:'panel',
-				id:'addpanel',
-				floating:true,
+				id:'add-panel',
 				modal:true,
 				hidden:true,
-				width:'200px',
-				height:'100px',
+				left: true,
+				hideOnMaskTap: true,
 				layout:'vbox',
 				items:[
 					{
@@ -30,35 +29,16 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 					{
 						xtype:'button',
 						text:'Create a New Session',
-						listeners:{
-							tap:function(){
-								/*
-								Ext.getCmp('session').add({
-									xtype:'sessionPanel',
-									id:'sessionbox'+IGLoo.name+IGLoo.sessions.nextid,
-								});
-								*/
-								var sid = 'sessionbox'+IGLoo.name+IGLoo.sessions.nextid;
-								now.addSession(sid);
-
-								IGLoo.sessions.nextid += 1;
-								Ext.getCmp('addpanel').hide();
-							}
-						},
-						flex:1
+						flex:1,
+						handler:function(){
+							console.log("Request to Add Session")
+							var sid = 'sessionbox'+IGLoo.name+IGLoo.sessions.nextid;
+							now.serverAddSession(sid);
+							IGLoo.sessions.nextid += 1;
+							Ext.getCmp('add-panel').hide();
+						}
 					}
 				]
-			},
-			{
-				xtype: 'panel',
-				id: 'sesssion-details',	
-				html: 'This will be the session detail',
-				modal: true,
-				hideOnMaskTap: true,
-				centered: true,
-				hidden: true,
-				width: '50%',
-				height: '50%'
 			},
 			{
 				xtype: 'titlebar',
@@ -66,25 +46,26 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			    title: 'Configure Panel',
 			    items: [
 			        {
+			        	xtype: 'button',
 			            iconCls: 'add',
 			            iconMask: true,
 			            align: 'left',
-						listeners:{
-							tap:function(){
-								var addpanel = Ext.ComponentQuery.query('#addpanel')[0];
-								if(addpanel.isHidden())
-									addpanel.show('pop');
-								else
-									addpanel.hide();
-							}
+						handler:function() {
+							var addpanel = Ext.getCmp('add-panel');
+							console.log(addpanel);
+							if(addpanel.isHidden())
+								addpanel.show('pop');
+							else
+								addpanel.hide();
 						}
+						
 			        }
 			    ]
 			},
 			{
 				xtype:'panel',
 				layout:'auto',
-				id:'devicepanel',
+				id:'device-panel',
 				html:[
 					'<h1>Devices</h1><hr/>'
 				].join(''),
@@ -100,8 +81,19 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			{
 				xtype:'panel',
 				layout:'vbox',
-				id:'session',	
+				id:'sessions-panel',	
 				flex:1
+			},
+			{
+				xtype: 'panel',
+				id: 'sesssion-details',	
+				html: 'This will be the session details',
+				modal: true,
+				hideOnMaskTap: true,
+				centered: true,
+				hidden: true,
+				width: '50%',
+				height: '50%'
 			}
 		]
     }

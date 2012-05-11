@@ -1,7 +1,7 @@
 Ext.define('IGLoo.view.MainPanel', {
     extend: 'Ext.TabPanel',
     requires: [
-		'Ext.TitleBar',
+		'Ext.TitleBar'
 	],
     
     config: {
