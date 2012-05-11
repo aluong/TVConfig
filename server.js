@@ -23,23 +23,28 @@ console.log('Server Listening on Port: ' + 1111);
 var everyone = now.initialize(server);
 
 // List of devices registered to the server
+// Maps a Device to a Client
 var devices = {};
+
 // List of sessions registered to the server
 var sessions = {};
 
-everyone.now.serverAddSession = function(sid){
-	console.log('session: ' + sid + ' added');
+// Maps of devices to sessions
+var device2Session = {}
+
+everyone.now.serverCreateSession = function(sid){
+	console.log('Session: ' + sid + ' Created');
 	
 	// Update Server's sessions lists
 	sessions[sid] = true;
 	
 	// Update all current user's sessions
-	everyone.now.clientReceiveSession(sid);
+	everyone.now.clientAddSession(sid);
 
 };
 
 everyone.now.serverDeleteSession = function(sid) {
-	console.log('session: ' + sid + ' deleted');
+	console.log('Session: ' + sid + ' Deleted');
 	// Update Server's sessions lists
 	sessions[sid] = false;
 	
@@ -57,11 +62,50 @@ everyone.now.serverLoadSessions = function() {
 	}
 }
 
+everyone.now.serverAddDeviceToSession = function(did, sid) {
+	// Ignore adding to the same session
+	if(device2Session[devices[did]] == sid) {
+		return;
+	}
+	
+	// Update NowJS group
+	var sessionGroup = now.getGroup(sid);
+	sessionGroup.addUser(devices[did])
+
+	// Remove user from old session
+	everyone.now.serverRemoveDeviceFromSession(did, device2Session[devices[did]])
+	
+	// Update Server's database
+	device2Session[devices[did]] = sid;
+	
+	console.log('Device: '+did+' added to Session: '+sid+ " with ClientId: "+devices[did]);
+}
+
+everyone.now.serverRemoveDeviceFromSession = function(did, sid) {
+	// Device was never in a session
+	if(device2Session[devices[did]] == null) {
+		return;
+	}
+	// If sid is not specified, remove device from previous session
+	else if(sid == null) {
+		sid = device2Session[devices[did]];
+	}
+	
+	// Update NowJS group
+	var sessionGroup = now.getGroup(sid);
+	sessionGroup.removeUser(devices[did])
+	
+	// Update Server's database
+	device2Session[devices[did]] = null;
+	
+	console.log('Device: '+did+' removed from Session: '+sid+ " with ClientId: "+devices[did]);	
+}
+
 everyone.now.serverAddDevice = function(name) {
 	console.log(name+" connected");
 	
 	// Update Server's devices lists
-	devices[name] = true
+	devices[name] = this.user.clientId;
 	
 	// Update all current user's devices
 	everyone.now.clientAddDevice(name);

@@ -33,7 +33,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 						handler:function(){
 							console.log("Request to Add Session")
 							var sid = 'session-'+IGLoo.name+'-'+IGLoo.sessions.nextid;
-							now.serverAddSession(sid);
+							now.serverCreateSession(sid);
 							IGLoo.sessions.nextid += 1;
 							Ext.getCmp('add-panel').hide();
 						}

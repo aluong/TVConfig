@@ -78,7 +78,7 @@ Ext.application({
 					}
 	
 					// Adds Sessions
-					now.clientReceiveSession = function(session_id) {
+					now.clientAddSession = function(session_id) {
 						Ext.getCmp('sessions-panel').add({
 							xtype:'sessionPanel',
 							id:session_id
