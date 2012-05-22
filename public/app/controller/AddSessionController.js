@@ -11,9 +11,11 @@ Ext.define('IGLoo.controller.AddSessionController',{
         		tap: function() {
 					console.log("Request to Add Session")
 					// Create a New Session
-					var sid = 'session-'+IGLoo.name+'-'+IGLoo.sessions.nextid;
+					var sid = 'session-'+IGLoo.dId+'-'+IGLoo.cId+'-'+IGLoo.sessions.nextId;
 					now.serverCreateSession(sid);
-					IGLoo.sessions.nextid += 1;
+					IGLoo.sessions.nextId += 1;
+					
+					// Move device icon to session
 					
 					Ext.getCmp('add-session-panel').hide();
         		}
@@ -21,7 +23,6 @@ Ext.define('IGLoo.controller.AddSessionController',{
         	titleBarAddSessionButton: {
         		tap: function() {
 					var addpanel = Ext.getCmp('add-session-panel');
-					console.log(addpanel);
 					if(addpanel.isHidden())
 						addpanel.show('pop');
 					else
@@ -31,3 +32,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
         }
     }
 });
+
+now.clientMoveDeviceIconToSession = function(did, sid) {
+
+}

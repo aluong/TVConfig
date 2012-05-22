@@ -34,8 +34,7 @@ var sessions = [];
 // Maps of devices to sessions
 var device2Session = [];
 
-everyone.now.serverCreateSession = function(sid){
-	sid += '-' + this.user.clientId;
+everyone.now.serverCreateSession = function(sid) {
 	console.log('Session: ' + sid + ' Created');
 	
 	// Update Server's sessions lists
@@ -121,35 +120,39 @@ everyone.now.serverGetDevicesFromSession = function(sid) {
 	});
 }
 
-everyone.now.serverAddDevice = function(name) {
-	console.log(name+" connected");
+everyone.now.serverAddDevice = function(did) {
+	console.log(did+" connected");
 	
 	// Update Server's devices lists
-	devices[name] = this.user.clientId;
+	devices[did] = this.user.clientId;
 	
 	// Update Server's user lists
-	users[this.user.clientId] = name;
+	users[this.user.clientId] = did;
+	
+	// Set the client's Id 
+	this.now.clientSetClientId(this.user.clientId);
 	
 	// Update all current user's devices
-	everyone.now.clientAddDevice(name);
+	everyone.now.clientAddDevice(did);
 };
 
 everyone.now.serverLoadDevices = function() {
 	// Load all current devices for the new client
-	for(var device in devices) {
-		if(devices[device]) {
-			console.log("loading device: "+device);
-			this.now.clientAddDevice(device);
+	for(var did in devices) {
+		if(devices[did] != null) {
+			console.log("loading device: "+did);
+			this.now.clientAddDevice(did);
 		}
 	}
 }
 
 everyone.disconnected(function() {
-	console.log(this.now.name+" disconnected")
+	console.log(this.now.did+" disconnected.")
 	
 	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
-		everyone.now.clientRemoveDevice(this.now.name);
-		everyone.now.serverRemoveDeviceFromSession(this.now.name);
-		devices[this.now.name] = false;
+		everyone.now.clientRemoveDevice(this.now.did);
+		everyone.now.serverRemoveDeviceFromSession(this.now.did);
+		devices[this.now.did] = null;
+		console.log(this.now.did+" removed from server.")
 	}
 }); 

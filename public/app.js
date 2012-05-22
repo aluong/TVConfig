@@ -20,7 +20,9 @@ Ext.application({
 		// Globals under the IGLoo namespace
 		IGLoo.devices = {};
 		IGLoo.sessions = {};
-		IGLoo.sessions.nextid = 0;
+		IGLoo.sessions.nextId = 0;
+		IGLoo.dId = ''; // Device name ex: "iPad"
+		IGLoo.cId = ''; // ClientId from socket.io
 		
 		Ext.Msg.prompt(
 			'Device Connected!',
@@ -32,9 +34,13 @@ Ext.application({
 	
 				now.ready(function(){
 					
-					// Add user's name
-					now.name = name;
-					IGLoo.name = name;
+					// ----------- CLIENT SIDE NOWJS FUNCTIONS ------------- //
+					
+					// Set the clientId
+					now.clientSetClientId = function(cId) {
+						IGLoo.cId = cId;
+						console.log('cid: '+IGLoo.cId);
+					};
 					
 					// Adds device to device list and creates new item
 					now.clientAddDevice = function(deviceName) {
@@ -62,7 +68,7 @@ Ext.application({
 						else {
 							console.log("Device Exists: "+deviceName);
 						}
-					}
+					};
 					
 					// Removes device
 					now.clientRemoveDevice = function(deviceName) {
@@ -76,7 +82,7 @@ Ext.application({
 							}
 						}
 					}
-	
+					
 					// Adds Sessions
 					now.clientAddSession = function(session_id) {
 						Ext.getCmp('sessions-panel').add({
@@ -85,7 +91,7 @@ Ext.application({
 						});
 						IGLoo.sessions[session_id] = true;
 					};
-	
+					
 					// Delete Session
 					now.clientDeleteSession = function(session_id) {
 						IGLoo.sessions[session_id] = false;
@@ -93,11 +99,21 @@ Ext.application({
 						Ext.getCmp('session-details').hide();
 					};
 					
+					// -------------------------------------------- //
 					
-					// Add Device to Server and then load all current devices and sessions
+					// Add user's name
+					IGLoo.dId = name;
+					now.did = name;
+					
+					// Add Device to Server
 					now.serverAddDevice(name);
+					
+					// Load Devices and Sessions
+					// Initial Delay 1 second
 					Ext.defer(now.serverLoadDevices,1000);
 					Ext.defer(now.serverLoadSessions,1000);
+
+					
 				});
 			},
 			null,
@@ -107,3 +123,4 @@ Ext.application({
 		);
 	}
 });
+					
