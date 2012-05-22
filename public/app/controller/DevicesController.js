@@ -33,7 +33,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 					var deviceId = e.getTarget().id;
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
-					// Determine what session is the device in
+					// Determine what session is the device located
 					var deviceSession = null;
 					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
 					var sessionRegion;
@@ -52,14 +52,14 @@ Ext.define('IGLoo.controller.DevicesController',{
 						session.setStyle('border: 1px solid #acacac;');
 					});
 					
-					// If the device was tied to a session
+					// Device ended up not in a session box
 					if(deviceSession == null) {
 						// Snap back effect
 						if(sessionRegion != null && dragPoint.x > sessionRegion.left) {
 							Ext.getCmp(deviceId).getDraggable().setOffset(100,100);
 						}
 						
-						// Remove device from session
+						// Remove device from its previous session
 						now.serverRemoveDeviceFromSession(Ext.getCmp(deviceId).getName())
 						
             			console.log("Device: "+deviceId+" is not in a session. ");

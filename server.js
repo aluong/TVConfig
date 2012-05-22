@@ -23,32 +23,36 @@ console.log('Server Listening on Port: ' + 1111);
 var everyone = now.initialize(server);
 
 // List of devices registered to the server (Device -> ClientId)
-var devices = {};
+var devices = [];
 
 // List of users registered to the server (ClientId -> Device)
-var users = {};
+var users = [];
 
-// List of sessions registered to the server
-var sessions = {};
+// List of sessions registered to the server (sid -> session leader (clientId) )
+var sessions = [];
 
 // Maps of devices to sessions
-var device2Session = {}
+var device2Session = [];
 
 everyone.now.serverCreateSession = function(sid){
+	sid += '-' + this.user.clientId;
 	console.log('Session: ' + sid + ' Created');
 	
 	// Update Server's sessions lists
-	sessions[sid] = true;
+	sessions[sid] = this.user.clientId;
 	
 	// Update all current user's sessions
 	everyone.now.clientAddSession(sid);
+	
+	// Add the current Device to the session
+	everyone.now.serverAddDeviceToSession(users[this.user.clientId], sid);
 
 };
 
 everyone.now.serverDeleteSession = function(sid) {
 	console.log('Session: ' + sid + ' Deleted');
 	// Update Server's sessions lists
-	sessions[sid] = false;
+	sessions[sid] = null;
 	
 	// Update all current user's sessions
 	everyone.now.clientDeleteSession(sid);
@@ -57,7 +61,7 @@ everyone.now.serverDeleteSession = function(sid) {
 everyone.now.serverLoadSessions = function() {
 	// Load all current sessions for the new client
 	for(var session in sessions){
-		if(sessions[session]){
+		if(sessions[session] != null){
 			console.log("loading sessions: " + session);
 			this.now.clientAddSession(session);
 		}
@@ -67,6 +71,7 @@ everyone.now.serverLoadSessions = function() {
 everyone.now.serverAddDeviceToSession = function(did, sid) {
 	// Ignore adding to the same session
 	if(device2Session[devices[did]] == sid) {
+		console.log(did+" already in "+sid+", so did not add.");
 		return;
 	}
 	
@@ -86,7 +91,7 @@ everyone.now.serverAddDeviceToSession = function(did, sid) {
 everyone.now.serverRemoveDeviceFromSession = function(did, sid) {
 	// Device was never in a session
 	if(device2Session[devices[did]] == null) {
-		console.log(did+" was never in a session.");
+		console.log("Did not remove "+did+" because was never in a session.");
 		return;
 	}
 	// If sid is not specified, remove device from previous session

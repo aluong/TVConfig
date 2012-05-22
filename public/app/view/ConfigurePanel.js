@@ -14,7 +14,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 		items:[
 			{
 				xtype:'panel',
-				id:'add-panel',
+				id:'add-session-panel',
 				modal:true,
 				hidden:true,
 				left: true,
@@ -28,15 +28,9 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 					},
 					{
 						xtype:'button',
+						id: 'create-session-button',
 						text:'Create a New Session',
-						flex:1,
-						handler:function(){
-							console.log("Request to Add Session")
-							var sid = 'session-'+IGLoo.name+'-'+IGLoo.sessions.nextid;
-							now.serverCreateSession(sid);
-							IGLoo.sessions.nextid += 1;
-							Ext.getCmp('add-panel').hide();
-						}
+						flex:1
 					}
 				]
 			},
@@ -47,18 +41,10 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			    items: [
 			        {
 			        	xtype: 'button',
+			        	id: 'titlebar-add-session-button',
 			            iconCls: 'add',
 			            iconMask: true,
-			            align: 'left',
-						handler:function() {
-							var addpanel = Ext.getCmp('add-panel');
-							console.log(addpanel);
-							if(addpanel.isHidden())
-								addpanel.show('pop');
-							else
-								addpanel.hide();
-						}
-						
+			            align: 'left'
 			        }
 			    ]
 			},
