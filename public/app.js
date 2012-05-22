@@ -43,59 +43,59 @@ Ext.application({
 					};
 					
 					// Adds device to device list and creates new item
-					now.clientAddDevice = function(deviceName) {
-						console.log("Request to add device: "+deviceName)
-						if(!IGLoo.devices[deviceName]) {							
+					now.clientAddDevice = function(dId) {
+						console.log("Request to add device: "+dId)
+						if(!IGLoo.devices[dId]) {							
 							var configPanel = Ext.getCmp('config-panel');		
 							configPanel.add( {
 								xclass: 'IGLoo.view.DeviceIcon',
-								name: deviceName,
-								id: 'device-'+deviceName,
+								name: dId,
+								id: 'device-'+dId,
 								items:
 									[
 										{
 											html:[
 												"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
-												"<p>",deviceName,"</p>"
+												"<p>",dId,"</p>"
 											].join(''),
 											zindex:1
 										}
 									]
 							});
-							IGLoo.devices[deviceName] = true
-							console.log("Device Added: "+deviceName);
+							IGLoo.devices[dId] = true
+							console.log("Device Added: "+dId);
 						}
 						else {
-							console.log("Device Exists: "+deviceName);
+							console.log("Device Exists: "+dId);
 						}
 					};
 					
 					// Removes device
-					now.clientRemoveDevice = function(deviceName) {
-						console.log("Request to Remove Device: "+deviceName);
-						IGLoo.devices[deviceName] = false;
+					now.clientRemoveDevice = function(dId) {
+						console.log("Request to Remove Device: "+dId);
+						IGLoo.devices[dId] = false;
 						var configPanel = Ext.getCmp('config-panel');
 						for(var i = 5; i < configPanel.getItems().length; i++ ) {
-							if(configPanel.getAt(i).getName() == deviceName) {
+							if(configPanel.getAt(i).getName() == dId) {
 								configPanel.getAt(i).destroy()
-								console.log("Device Removed: "+deviceName);
+								console.log("Device Removed: "+dId);
 							}
 						}
 					}
 					
 					// Adds Sessions
-					now.clientAddSession = function(session_id) {
+					now.clientAddSession = function(sId) {
 						Ext.getCmp('sessions-panel').add({
 							xtype:'sessionPanel',
-							id:session_id
+							id:sId
 						});
-						IGLoo.sessions[session_id] = true;
+						IGLoo.sessions[sId] = true;
 					};
 					
 					// Delete Session
-					now.clientDeleteSession = function(session_id) {
-						IGLoo.sessions[session_id] = false;
-						Ext.getCmp(session_id).destroy();
+					now.clientDeleteSession = function(sId) {
+						IGLoo.sessions[sId] = false;
+						Ext.getCmp(sId).destroy();
 						Ext.getCmp('session-details').hide();
 					};
 					
