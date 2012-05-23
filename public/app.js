@@ -53,13 +53,13 @@ Ext.application({
 							configPanel.add( {
 								xclass: 'IGLoo.view.DeviceIcon',
 								name: dId,
-								id: 'device-'+dId,
+								id: dId,
 								items:
 									[
 										{
 											html:[
 												"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
-												"<p>",dId,"</p>"
+												"<p>",dId.substring(7),"</p>"
 											].join(''),
 											zindex:1
 										}
@@ -111,11 +111,11 @@ Ext.application({
 					// -------------------------------------------- //
 					
 					// Add user's name
-					IGLoo.dId = name;
-					now.dId = name;
+					IGLoo.dId = 'device-'+name;
+					now.dId = IGLoo.dId;
 					
 					// Add Device to Server
-					now.serverAddDevice(name);
+					now.serverAddDevice(IGLoo.dId);
 					
 					// Load Devices and Sessions
 					// Initial Delay 1 second

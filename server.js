@@ -61,7 +61,7 @@ everyone.now.serverDeleteSession = function(sId) {
 		for (var i = 0; i < usersList.length; i++) {
 			now.getClient(usersList[i], function() {
 				this.now.serverRemoveDeviceFromSession(users[usersList[i]], sId);
-				everyone.now.serverSetDeviceOffset('device-'+users[usersList[i]], 100, 100);
+				everyone.now.serverSetDeviceOffset(users[usersList[i]], 100, 100);
 			});
 		}
 	});
@@ -83,7 +83,7 @@ everyone.now.serverLoadSessions = function() {
 			// Move Devices to Session
 			now.getGroup(sId).getUsers(function (usersList) { 
 				for (var i = 0; i < usersList.length; i++) {
-					targetClient.now.clientMoveDeviceIconToSession('device-'+users[usersList[i]], sId);
+					targetClient.now.clientMoveDeviceIconToSession(users[usersList[i]], sId);
 				}
 			});
 		}

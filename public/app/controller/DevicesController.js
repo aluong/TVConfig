@@ -28,8 +28,8 @@ Ext.define('IGLoo.controller.DevicesController',{
 					console.log('drag ended');
 					
 					// Grab Device
-					var deviceId = e.getTarget().id;
-					var device = Ext.getCmp(deviceId);
+					var dId = e.getTarget().id;
+					var device = Ext.getCmp(dId);
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
 					// Determine what session is the device located
@@ -43,10 +43,10 @@ Ext.define('IGLoo.controller.DevicesController',{
 						if(!sessionRegion.isOutOfBound(dragPoint)) {
 							
 							// Move Device to Session
-							now.clientMoveDeviceIconToSession(deviceId, sId);
+							now.clientMoveDeviceIconToSession(dId, sId);
 							
 							// Add Device to Session
-							now.serverAddDeviceToSession(device.getName(), sId);
+							now.serverAddDeviceToSession(dId, sId);
 							
 							deviceInSession = true;
 						}
@@ -57,13 +57,13 @@ Ext.define('IGLoo.controller.DevicesController',{
 					if(!deviceInSession) {
 						
 						// Remove device from its previous session
-						now.serverRemoveDeviceFromSession(device.getName());
+						now.serverRemoveDeviceFromSession(dId);
 						
 						// Reset the Device (Snap back to offset)
-						now.serverSetDeviceOffset(deviceId, IGLoo.offset.x, IGLoo.offset.y);
+						now.serverSetDeviceOffset(dId, IGLoo.offset.x, IGLoo.offset.y);
 						
 						
-            			console.log("Device: "+deviceId+" is not in a session. ");
+            			console.log("Device: "+dId+" is not in a session. ");
 					}
 					
 					var configpanel = Ext.getCmp('config-panel');
@@ -74,10 +74,10 @@ Ext.define('IGLoo.controller.DevicesController',{
     }
 });
 
-now.clientMoveDeviceIconToSession = function(did, sid) {
-	console.log("Device: "+did+" Moved To Session: "+sid);
-	var device = Ext.getCmp(did);
-	var sessionRegion = Ext.util.Region.getRegion(sid);
+now.clientMoveDeviceIconToSession = function(dId, sId) {
+	console.log("Device: "+dId+" Moved To Session: "+sId);
+	var device = Ext.getCmp(dId);
+	var sessionRegion = Ext.util.Region.getRegion(sId);
 	device.getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
 };
 

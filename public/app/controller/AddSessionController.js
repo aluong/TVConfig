@@ -19,7 +19,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					
 					// Move device icon to session
 					// HACK! SHOULD NOT RELY ON TIMER
-					Ext.defer(now.serverMoveDeviceIconToSession, 500, this, ['device-'+IGLoo.dId, sid]);
+					Ext.defer(now.serverMoveDeviceIconToSession, 500, this, [IGLoo.dId, sid]);
 					
         		}
         	},
