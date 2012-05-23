@@ -24,6 +24,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 					{
 						xtype:'button',
 						text:'Add a New Device',
+						disabled: true, // Feature Not Present yet
 						flex:1
 					},
 					{
@@ -37,7 +38,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			{
 				xtype: 'titlebar',
 				docked: 'top',
-			    title: 'Configure Panel',
+			    title: 'Configuration Panel',
 			    items: [
 			        {
 			        	xtype: 'button',

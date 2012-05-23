@@ -20,6 +20,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 					'height:20px;',
 					'width:100px;'
 				].join(''),
+				// On Tap we can detect which session-details was clicked 
 				handler: function() {
 					var sessionDetails = Ext.getCmp('session-details');
 					if(sessionDetails.isHidden()) {

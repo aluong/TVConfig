@@ -42,8 +42,12 @@ Ext.define('IGLoo.controller.ConfigureController',{
 now.clientGetDevicesFromSession = function(listOfDevices) {
 	var sessionDetailsPanel = Ext.getCmp('session-details');
 
-	// very simple display
+	// Simple Display
+	// Session leader is Position 0
+	sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<p><b>Session Leader: '+listOfDevices[0].substring(7)+'</b>');
 	sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<p>Current Devices:');
-	for(var name in listOfDevices)
-		sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<br>'+listOfDevices[name]);
+	for(var i = 1; i < listOfDevices.length; i++) {
+		var origHtml = sessionDetailsPanel.getHtml();
+		sessionDetailsPanel.setHtml(origHtml+'<br>'+listOfDevices[i].substring(7));
+	}
 }
