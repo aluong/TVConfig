@@ -42,9 +42,6 @@ Ext.define('IGLoo.controller.DevicesController',{
 						// Found a session with the device
 						if(!sessionRegion.isOutOfBound(dragPoint)) {
 							
-							// Move Device to Session
-							now.clientMoveDeviceIconToSession(dId, sId);
-							
 							// Add Device to Session
 							now.serverAddDeviceToSession(dId, sId);
 							
@@ -61,7 +58,6 @@ Ext.define('IGLoo.controller.DevicesController',{
 						
 						// Reset the Device (Snap back to offset)
 						now.serverSetDeviceOffset(dId, IGLoo.offset.x, IGLoo.offset.y);
-						
 						
             			console.log("Device: "+dId+" is not in a session. ");
 					}

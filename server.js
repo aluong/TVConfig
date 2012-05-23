@@ -73,7 +73,7 @@ everyone.now.serverDeleteSession = function(sId) {
 everyone.now.serverLoadSessions = function() {
 	var targetClient = this;
 	
-	console.log(this.user.clientId+' Loading Sessions...');
+	console.log(users[this.user.clientId]+' Loading Sessions');
 	// Load all current sessions for the new client
 	for(var sId in sessions){
 		if(sessions[sId] != null){
@@ -88,7 +88,7 @@ everyone.now.serverLoadSessions = function() {
 			});
 		}
 	}
-	console.log(this.user.clientId+' Loading Complete');
+	console.log(users[this.user.clientId]+' Loading Completed');
 }
 
 everyone.now.serverAddDeviceToSession = function(dId, sId) {
@@ -107,6 +107,9 @@ everyone.now.serverAddDeviceToSession = function(dId, sId) {
 	
 	// Update Server's database
 	device2Session[devices[dId]] = sId;
+	
+	// Move Device Icon into session
+	everyone.now.serverMoveDeviceIconToSession(dId, sId);
 	
 	console.log('Device: '+dId+' added to Session: '+sId+ " with ClientId: "+devices[dId]);
 }
@@ -138,23 +141,39 @@ everyone.now.serverRemoveDeviceFromSession = function(dId, sId) {
 	  	console.log("Deleting Session: "+sId+" because its empty.")
 	  	targetClient.now.serverDeleteSession(sId);
 	  }
-	});
+	  else {
+		// Update Session Leader if device leaves
+		if(devices[dId] == sessions[sId]) {
+			// Select First User
+			now.getGroup(sId).getUsers(function (usersList) { 
+				sessions[sId] = usersList[0];
+				console.log('New Session Leader for '+sId+' is '+users[usersList[0]]);
+			});
+		}
+	  }
+	});	
 }
 
 everyone.now.serverGetDevicesFromSession = function(sId) {
 	var targetClient = this;
 	now.getGroup(sId).getUsers(function (usersList) { 
+		
+		// Create List of devices in the session
 		var listOfDevices = [];
 		for (var i = 0; i < usersList.length; i++) {
-			listOfDevices.push(users[usersList[i]]);
+			if(usersList[i] != sessions[sId])
+				listOfDevices.push(users[usersList[i]]);
 		}
-		console.log("Sending list: "+listOfDevices);
+		// Put the session leader first
+		listOfDevices.unshift(users[sessions[sId]]);
+		
+		console.log(sId+" session's devices list: "+listOfDevices);
 		targetClient.now.clientGetDevicesFromSession(listOfDevices);
 	});
 }
 
 everyone.now.serverMoveDeviceIconToSession = function(dId, sId) {
-	everyone.now.clientMoveDeviceIconToSession(dId, sId);
+	this.now.clientMoveDeviceIconToSession(dId, sId);
 }
 
 everyone.now.serverAddDevice = function(dId) {
