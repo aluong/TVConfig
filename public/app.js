@@ -85,15 +85,19 @@ Ext.application({
 					
 					// Adds Sessions
 					now.clientAddSession = function(sId) {
-						Ext.getCmp('sessions-panel').add({
-							xtype:'sessionPanel',
-							id:sId
-						});
+						console.log("Creating Session: "+sId);
+						if(!IGLoo.sessions[sId]) {
+							Ext.getCmp('sessions-panel').add({
+								xtype:'sessionPanel',
+								id:sId
+							});
+						}
 						IGLoo.sessions[sId] = true;
 					};
 					
 					// Delete Session
 					now.clientDeleteSession = function(sId) {
+						console.log("Destroying Session: "+sId);
 						IGLoo.sessions[sId] = false;
 						Ext.getCmp(sId).destroy();
 						Ext.getCmp('session-details').hide();
@@ -103,7 +107,7 @@ Ext.application({
 					
 					// Add user's name
 					IGLoo.dId = name;
-					now.did = name;
+					now.dId = name;
 					
 					// Add Device to Server
 					now.serverAddDevice(name);

@@ -15,9 +15,12 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					now.serverCreateSession(sid);
 					IGLoo.sessions.nextId += 1;
 					
-					// Move device icon to session
-					
 					Ext.getCmp('add-session-panel').hide();
+					
+					// Move device icon to session
+					// HACK! SHOULD NOT RELY ON TIMER
+					Ext.defer(now.serverMoveDeviceIconToSession, 500, this, ['device-'+IGLoo.dId, sid]);
+					
         		}
         	},
         	titleBarAddSessionButton: {
@@ -34,5 +37,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
 });
 
 now.clientMoveDeviceIconToSession = function(did, sid) {
-
-}
+	var device = Ext.getCmp(did);
+	var sessionRegion = Ext.util.Region.getRegion(sid);
+	device.getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
+};
