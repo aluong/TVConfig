@@ -1,7 +1,7 @@
 Ext.application({
 	name: 'IGLoo',
 
-	views: ['DeviceIcon','ConfigurePanel', 'SessionPanel', 'SessionDetails'],
+	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails'],
 	controllers:['ConfigureController', 'DevicesController', 'AddSessionController'],
 	requires: ['Ext.MessageBox'],
 	
