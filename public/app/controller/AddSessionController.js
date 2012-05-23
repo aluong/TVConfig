@@ -35,9 +35,3 @@ Ext.define('IGLoo.controller.AddSessionController',{
         }
     }
 });
-
-now.clientMoveDeviceIconToSession = function(did, sid) {
-	var device = Ext.getCmp(did);
-	var sessionRegion = Ext.util.Region.getRegion(sid);
-	device.getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
-};

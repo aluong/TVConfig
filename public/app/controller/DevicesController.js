@@ -22,45 +22,46 @@ Ext.define('IGLoo.controller.DevicesController',{
 							session.setStyle('border: 2px dashed #000;');
 						else
 							session.setStyle('border: 1px solid #acacac;');
-					})
-					
-					
+					});
 				},
 				dragend:function(e){
 					console.log('drag ended');
 					
 					// Grab Device
 					var deviceId = e.getTarget().id;
+					var device = Ext.getCmp(deviceId);
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
 					// Determine what session is the device located
-					var deviceSession = null;
+					var deviceInSession = false;
 					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
-					var sessionRegion;
 					Ext.each(sessionpanels, function(session) {
-						sessionRegion = Ext.util.Region.getRegion(session.getId());
+						var sessionRegion = Ext.util.Region.getRegion(session.getId());
+						var sId = session.getId();
 						
 						// Found a session with the device
 						if(!sessionRegion.isOutOfBound(dragPoint)) {
-							console.log("Device: "+deviceId+" Moved To Session: "+session.getId());
-							Ext.getCmp(deviceId).getDraggable().setOffset(sessionRegion.left,sessionRegion.top);
-							deviceSession = session.getId();
+							
+							// Move Device to Session
+							now.clientMoveDeviceIconToSession(deviceId, sId);
 							
 							// Add Device to Session
-							now.serverAddDeviceToSession(Ext.getCmp(deviceId).getName(), deviceSession);
+							now.serverAddDeviceToSession(device.getName(), sId);
+							
+							deviceInSession = true;
 						}
 						session.setStyle('border: 1px solid #acacac;');
 					});
 					
 					// Device ended up not in a session box
-					if(deviceSession == null) {
-						// Snap back effect
-						if(sessionRegion != null && dragPoint.x > sessionRegion.left) {
-							Ext.getCmp(deviceId).getDraggable().setOffset(100,100);
-						}
+					if(!deviceInSession) {
 						
 						// Remove device from its previous session
-						now.serverRemoveDeviceFromSession(Ext.getCmp(deviceId).getName())
+						now.serverRemoveDeviceFromSession(device.getName());
+						
+						// Reset the Device (Snap back to offset)
+						now.serverSetDeviceOffset(deviceId, IGLoo.offset.x, IGLoo.offset.y);
+						
 						
             			console.log("Device: "+deviceId+" is not in a session. ");
 					}
@@ -72,3 +73,15 @@ Ext.define('IGLoo.controller.DevicesController',{
         }
     }
 });
+
+now.clientMoveDeviceIconToSession = function(did, sid) {
+	console.log("Device: "+did+" Moved To Session: "+sid);
+	var device = Ext.getCmp(did);
+	var sessionRegion = Ext.util.Region.getRegion(sid);
+	device.getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
+};
+
+now.clientSetDeviceOffset = function(dId, x, y) {
+	console.log('Set '+dId+"'s offset to ("+x+', '+y+')');
+	Ext.getCmp(dId).getDraggable().setOffset(x,y);	
+};

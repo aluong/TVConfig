@@ -23,6 +23,9 @@ Ext.application({
 		IGLoo.sessions.nextId = 0;
 		IGLoo.dId = ''; // Device name ex: "iPad"
 		IGLoo.cId = ''; // ClientId from socket.io
+		IGLoo.offset = {}; // Offset for devices
+		IGLoo.offset.x = 100;
+		IGLoo.offset.y = 100;
 		
 		Ext.Msg.prompt(
 			'Device Connected!',
@@ -85,8 +88,8 @@ Ext.application({
 					
 					// Adds Sessions
 					now.clientAddSession = function(sId) {
-						console.log("Creating Session: "+sId);
 						if(!IGLoo.sessions[sId]) {
+							console.log("Creating Session: "+sId);
 							Ext.getCmp('sessions-panel').add({
 								xtype:'sessionPanel',
 								id:sId
@@ -97,9 +100,11 @@ Ext.application({
 					
 					// Delete Session
 					now.clientDeleteSession = function(sId) {
-						console.log("Destroying Session: "+sId);
+						if(IGLoo.sessions[sId]) {
+							console.log("Destroying Session: "+sId);
+							Ext.getCmp(sId).destroy();
+						}
 						IGLoo.sessions[sId] = false;
-						Ext.getCmp(sId).destroy();
 						Ext.getCmp('session-details').hide();
 					};
 					

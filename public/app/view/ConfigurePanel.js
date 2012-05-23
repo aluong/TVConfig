@@ -51,7 +51,7 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			{
 				xtype:'panel',
 				layout:'auto',
-				id:'device-panel',
+				id:'devices-panel',
 				html:[
 					'<h1>Devices</h1><hr/>'
 				].join(''),

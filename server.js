@@ -56,6 +56,16 @@ everyone.now.serverDeleteSession = function(sId) {
 	// Update all current user's sessions
 	everyone.now.clientDeleteSession(sId);
 	
+	// Remove all devices from this session
+	now.getGroup(sId).getUsers(function (usersList) { 
+		for (var i = 0; i < usersList.length; i++) {
+			now.getClient(usersList[i], function() {
+				this.now.serverRemoveDeviceFromSession(users[usersList[i]], sId);
+				everyone.now.serverSetDeviceOffset('device-'+users[usersList[i]], 100, 100);
+			});
+		}
+	});
+	
 	// Update Positioning of Devices
 	everyone.now.serverLoadSessions();
 }
@@ -63,7 +73,7 @@ everyone.now.serverDeleteSession = function(sId) {
 everyone.now.serverLoadSessions = function() {
 	var targetClient = this;
 	
-	console.log(this.user.clientId+' Loading Sessions:');
+	console.log(this.user.clientId+' Loading Sessions...');
 	// Load all current sessions for the new client
 	for(var sId in sessions){
 		if(sessions[sId] != null){
@@ -78,6 +88,7 @@ everyone.now.serverLoadSessions = function() {
 			});
 		}
 	}
+	console.log(this.user.clientId+' Loading Complete');
 }
 
 everyone.now.serverAddDeviceToSession = function(dId, sId) {
@@ -172,13 +183,30 @@ everyone.now.serverLoadDevices = function() {
 	}
 }
 
+everyone.now.serverSetDeviceOffset = function(dId, x, y) {
+	console.log('Setting '+dId+"'s offset to ("+x+', '+y+')');
+	everyone.now.clientSetDeviceOffset(dId, x, y);
+}
+
 everyone.disconnected(function() {
 	console.log(this.now.dId+" disconnected.")
 	
 	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
 		everyone.now.clientRemoveDevice(this.now.dId);
-		this.now.serverRemoveDeviceFromSession(this.now.dId, null);
+		everyone.now.serverRemoveDeviceFromSession(this.now.dId, null);
 		devices[this.now.dId] = null;
 		console.log(this.now.dId+" removed from server.")
 	}
+	
+	// Reset all variables, because no client is connected
+	everyone.count(function (ct) { 
+	  if(ct == 0) {
+		console.log('Resetting all server database variables...')
+		devices = [];
+		users = [];
+		sessions = [];
+		device2Session = [];
+	  }
+	});
+	
 }); 
