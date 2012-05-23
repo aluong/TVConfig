@@ -1,14 +1,22 @@
 Ext.define('IGLoo.view.VideoPanel', {
     extend:'Ext.Container',
     xtype:'videopanel',
+//	alias: 'widget.videopanel',
+
 	requires:[
 		'Ext.Video'
 	],
-    
+   
     config:{
+		id:'video-panel',
+		modal:true,
+//		hidden:true,
+		centered:true,
+		hideOnMaskTap:true,
+		zIndex:90000,
+		width:'80%',
+		height:'80%',
 		layout:'fit',
-        title:'Video',
-        iconCls:'star',
         items:[
 			{
 				xtype:'video',

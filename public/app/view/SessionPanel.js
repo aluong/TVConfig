@@ -2,7 +2,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 	extend: 'Ext.Panel',
 	alias: 'widget.sessionPanel',
 	config: {
-		layout: 'fit',
+		//layout: 'fit',
 		cls:'sessionpanel',
 		height:'200px',
 		html:'<h1>Sessions</h1><hr/>',
@@ -18,7 +18,8 @@ Ext.define('IGLoo.view.SessionPanel', {
 				text:'details',
 				style:[
 					'height:20px;',
-					'width:100px;'
+					'width:100px;',
+					'float:left;'
 				].join(''),
 				// On Tap we can detect which session-details was clicked 
 				handler: function() {
@@ -30,6 +31,24 @@ Ext.define('IGLoo.view.SessionPanel', {
 					}
 					else
 						sessionDetails.hide();
+				}
+			},
+			{
+				xtype:'button',
+				text:'watch',
+				style:[
+					'height:20px;',
+					'width:100px;',
+					'float:right;'
+				].join(''),
+				handler: function(){
+					var videoPanel = Ext.getCmp('video-panel');
+					if(videoPanel.isHidden()){
+						videoPanel.show('pop');
+					}
+					else{
+						videoPanel.hide();
+					}
 				}
 			}
 		]
