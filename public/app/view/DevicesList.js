@@ -4,11 +4,15 @@ Ext.define('IGLoo.view.DevicesList', {
 	config: {
 		store: 'DevicesStore',
 		itemTpl: new Ext.XTemplate(
-			"<img src='resources/img/ipad-icon.jpg' style='width:10%;'/>",
-			" {[this.deviceName(values.device)]}",	
+			"<img src='resources/img/ipad-icon.jpg' style='width:10%;'/>",	
+			'<tpl if="values.leader == 1">',
+	            ' <b>{[this.deviceName(values.device)]} (Session Leader)</b>',
+	        '<tpl else>',
+	            ' {[this.deviceName(values.device)]}',
+	        '</tpl>',
 			{
-				deviceName: function(name){
-				   return name.substring(7);
+				deviceName: function(name) {
+					return name.substring(7);
 				}
 			}
 		)

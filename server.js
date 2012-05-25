@@ -26,6 +26,13 @@ var server = require('http').createServer(function (request, response) {
     			if(device2Session[dId] == sId) {
     				var device = {};
     				device['device'] = users[dId];
+    				
+    				// Session Leader Check
+    				if(sessions[sId] == dId)
+    					device['leader'] = 1;
+    				else
+    					device['leader'] = 0;
+    				
     				devices.push(device);
     			}
     		}
