@@ -13,7 +13,28 @@ var server = require('http').createServer(function (request, response) {
 	
     request.addListener('end', function () {
     	
-		file.serve(request, response);
+    	// Returns a list of devices tied to a session
+    	// Ex: /sessionDevices?sId=sessionName
+    	if(path == '/sessionDevices') {
+    		var sId = querystring.parse(url.parse(request.url).query)['sId'];
+    		console.log('Finding Devices for Session: '+sId);
+    		response.writeHead(200, {"Content-Type": "application/json"});
+    		
+    		// Build Devices List
+    		var devices = [];
+    		for(dId in device2Session) {
+    			if(device2Session[dId] == sId) {
+    				var device = {};
+    				device['device'] = users[dId];
+    				devices.push(device);
+    			}
+    		}
+    		
+			response.write(JSON.stringify(devices, null, 4));
+			response.end();
+    	}
+    	else
+    		file.serve(request, response);
     });
 });
 server.listen(1111);
@@ -176,25 +197,6 @@ everyone.now.serverRemoveDeviceFromSession = function(dId, sId) {
 	});	
 }
 
-// Retreive Session Details
-// Call Path: 1 Client -> Server -> 1 Client 
-everyone.now.serverGetDevicesFromSession = function(sId) {
-	var targetClient = this;
-	now.getGroup(sId).getUsers(function (usersList) { 
-		
-		// Create List of devices in the session
-		var listOfDevices = [];
-		for (var i = 0; i < usersList.length; i++) {
-			if(usersList[i] != sessions[sId])
-				listOfDevices.push(users[usersList[i]]);
-		}
-		// Put the session leader first
-		listOfDevices.unshift(users[sessions[sId]]);
-		
-		console.log(sId+" session's devices list: "+listOfDevices);
-		targetClient.now.clientGetDevicesFromSession(listOfDevices);
-	});
-}
 
 // Called from one client to move a devices to (x,y) for all devices 
 // Call Path: 1 Client -> Server -> All Clients

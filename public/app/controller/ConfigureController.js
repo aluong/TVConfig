@@ -20,7 +20,14 @@ Ext.define('IGLoo.controller.ConfigureController',{
         	sessionDetails: {
         		show: function() {
         			var sessionDetailsPanel = Ext.getCmp('session-details');
-        			now.serverGetDevicesFromSession(sessionDetailsPanel.currentSession);
+        			
+        			// Update Session Label
+        			sessionDetailsPanel.getAt(0).setHtml(sessionDetailsPanel.currentSession);
+        		
+        			// Update the Devices List
+        			var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
+        			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
+					sessionDetailStore.load();
         		}
         	},
             deleteSessionsButton: {
@@ -36,18 +43,3 @@ Ext.define('IGLoo.controller.ConfigureController',{
         }
     }
 });
-
-// Callback form of serverGetDevicesFromSession obtaining 
-// listOfDevices from a particular session
-now.clientGetDevicesFromSession = function(listOfDevices) {
-	var sessionDetailsPanel = Ext.getCmp('session-details');
-
-	// Simple Display
-	// Session leader is Position 0
-	sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<p><b>Session Leader: '+listOfDevices[0].substring(7)+'</b>');
-	sessionDetailsPanel.setHtml(sessionDetailsPanel.getHtml()+'<p>Current Devices:');
-	for(var i = 1; i < listOfDevices.length; i++) {
-		var origHtml = sessionDetailsPanel.getHtml();
-		sessionDetailsPanel.setHtml(origHtml+'<br>'+listOfDevices[i].substring(7));
-	}
-}
