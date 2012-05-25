@@ -1,49 +1,42 @@
 // Setting Up Server
-var static = require('node-static'),
-	file = new(static.Server)('./public', {cache: 0}),
-	exec = require('child_process').exec,
-	now = require('now'),
-	fs = require('fs'),
-	url = require('url'),
-	mysql = require('mysql'),
-	querystring = require('querystring');
-	
-var server = require('http').createServer(function (request, response) {
-	var path = url.parse(request.url).pathname;
-	
-    request.addListener('end', function () {
-    	
-    	// Returns a list of devices tied to a session
-    	// Ex: /sessionDevices?sId=sessionName
-    	if(path == '/sessionDevices') {
-    		var sId = querystring.parse(url.parse(request.url).query)['sId'];
-    		console.log('Finding Devices for Session: '+sId);
-    		response.writeHead(200, {"Content-Type": "application/json"});
-    		
-    		// Build Devices List
-    		var devices = [];
-    		for(dId in device2Session) {
-    			if(device2Session[dId] == sId) {
-    				var device = {};
-    				device['device'] = users[dId];
-    				
-    				// Session Leader Check
-    				if(sessions[sId] == dId)
-    					device['leader'] = 1;
-    				else
-    					device['leader'] = 0;
-    				
-    				devices.push(device);
-    			}
-    		}
-    		
-			response.write(JSON.stringify(devices, null, 4));
-			response.end();
-    	}
-    	else
-    		file.serve(request, response);
-    });
+var exec = require('child_process').exec,
+    now = require('now'),
+    fs = require('fs'),
+    url = require('url'),
+    querystring = require('querystring'),
+    express = require('express');
+
+var server = express.createServer();
+
+// Returns a list of devices tied to a session
+// Ex: /sessionDevices?sId=sessionName
+server.get('/sessionDevices', function(request, response) {
+		var sId = request.param('sId');
+		console.log('Finding Devices for Session: '+sId);
+		
+		// Build Devices List
+		var devices = [];
+		for(dId in device2Session) {
+			if(device2Session[dId] == sId) {
+				var device = {};
+				device['device'] = users[dId];
+				
+				// Session Leader Check
+				if(sessions[sId] == dId)
+					device['leader'] = 1;
+				else
+					device['leader'] = 0;
+				
+				devices.push(device);
+			}
+		}
+		
+		response.send(JSON.stringify(devices, null, 4), {"Content-Type": "application/json"});
 });
+
+// General Static Files
+server.use(express.static(__dirname + '/public'));
+
 server.listen(1111);
 console.log('Server Listening on Port: ' + 1111);
 
