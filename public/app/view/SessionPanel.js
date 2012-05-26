@@ -38,8 +38,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 					{
 				    	xtype: 'spacer',
 				       	width: 10
-				    },
-					/*
+				    },			
 				    {
 						xtype:'button',
 						text:'Watch Video',
@@ -59,7 +58,6 @@ Ext.define('IGLoo.view.SessionPanel', {
 							}
 						}
 				    },
-					*/
 				    {
 				    	xtype: 'spacer',
 				       	width: 10
