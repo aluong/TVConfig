@@ -30,13 +30,14 @@ Ext.define('IGLoo.view.DevicesItem', {
     updateImage: function(newImage, oldImage) {
         if (newImage) {
             this.add(newImage);
+            this.add(Ext.create(Ext.Spacer, {width:15}));
         }
 
         if (oldImage) {
             this.remove(oldImage);
         }
     },
-	
+    
 	applyName: function(config) {
 		return Ext.factory(config, 'Ext.Component', this.getName());
 	},
@@ -50,6 +51,7 @@ Ext.define('IGLoo.view.DevicesItem', {
             this.remove(oldText);
         }		
 	},
+	
 	updateRecord: function(record) {
 		this.callParent(arguments);
 		if(record.get('leader') == 1) {

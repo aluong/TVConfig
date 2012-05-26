@@ -1,7 +1,9 @@
 Ext.application({
 	name: 'IGLoo',
 
-	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails', 'DevicesList', 'MediaList', 'DevicesItem'],
+	views: [
+		'DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 
+		'SessionDetails', 'DevicesList', 'DevicesItem', 'MediaList', 'MediaItem'],
 	stores: ['DevicesStore', 'MediaStore'],
 	models: ['Device', 'Media'], 
 	controllers: ['ConfigureController', 'DevicesController', 'AddSessionController', 'MediaListController'],
