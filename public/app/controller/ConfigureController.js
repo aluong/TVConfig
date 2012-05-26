@@ -28,7 +28,15 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
         			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
 					sessionDetailStore.load();
+					
+					// lock config panel
+					Ext.getCmp('config-panel').setScrollable(false);
+        		},
+        		hide: function() {
+        			// unlock config panel
+					Ext.getCmp('config-panel').setScrollable(true);
         		}
+        		
         	},
             deleteSessionsButton: {
             	tap: function() {
