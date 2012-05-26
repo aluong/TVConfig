@@ -10,7 +10,7 @@ Ext.define('IGLoo.view.VideoPanel', {
     config:{
 		id:'video-panel',
 		modal:true,
-//		hidden:true,
+		hidden:true,
 		centered:true,
 		hideOnMaskTap:true,
 		zIndex:90000,
