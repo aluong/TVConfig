@@ -4,7 +4,7 @@ Ext.application({
 	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails', 'DevicesList', 'MediaList'],
 	stores: ['DevicesStore', 'MediaStore'],
 	models: ['Device', 'Media'], 
-	controllers: ['ConfigureController', 'DevicesController', 'AddSessionController'],
+	controllers: ['ConfigureController', 'DevicesController', 'AddSessionController', 'MediaListController'],
 	requires: ['Ext.MessageBox'],
 	
 	icon: {

@@ -17,6 +17,7 @@ Ext.define('IGLoo.view.VideoPanel', {
 		width:'80%',
 		height:'80%',
 		layout:'fit',
+/*
         items:[
 			{
 				xtype:'video',
@@ -25,5 +26,6 @@ Ext.define('IGLoo.view.VideoPanel', {
 				posterUrl:'resources/img/cover.png'
 			}
 		]
+*/
     }
 })
