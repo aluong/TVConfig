@@ -22,7 +22,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			var sessionDetailsPanel = Ext.getCmp('session-details');
         			
         			// Update Session Label
-        			sessionDetailsPanel.getAt(0).setHtml(sessionDetailsPanel.currentSession);
+        			sessionDetailsPanel.getAt(0).setHtml('<center>'+sessionDetailsPanel.currentSession+'<center>');
         		
         			// Update the Devices List
         			var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();

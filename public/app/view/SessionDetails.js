@@ -16,6 +16,7 @@ Ext.define('IGLoo.view.SessionDetails', {
 			{
 				xtype: 'label',
 				html: 'Session Details',
+				style: 'color: blue;',
 				dock: 'top'
 			},
 			{
@@ -24,12 +25,12 @@ Ext.define('IGLoo.view.SessionDetails', {
 				items: [
 					{
 						xtype: 'label',
-    					html: '<b>List of Devices</b>',
+    					html: '<b><center>List of Devices</center></b>',
     					flex: 1
 					},
 					{
 						xtype: 'label',
-    					html: '<b>List of Media</b>',
+    					html: '<b><center>List of Media</center></b>',
     					flex: 1
 					}
 				]
@@ -45,7 +46,7 @@ Ext.define('IGLoo.view.SessionDetails', {
 						flex: 1
 					},
 					{
-						xtype: 'container',
+						xtype: 'mediaList',
 						id: 'session-details-media',
 						flex: 1
 					}

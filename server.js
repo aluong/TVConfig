@@ -34,6 +34,25 @@ server.get('/sessionDevices', function(request, response) {
 		response.send(JSON.stringify(devices, null, 4), {"Content-Type": "application/json"});
 });
 
+// Returns a list of media tied to a session
+// Ex: /media?sId=sessionName
+server.get('/media', function(request, response) {
+		var sId = request.param('sId');
+		console.log('Finding Media for Session: '+sId);
+		
+		// **************  INCOMPLETE  **************
+		// NEED TO WRITE LOGIC FOR CUSTOM MEDIA PER SESSION
+		// **************  INCOMPLETE  **************
+		
+		// Build Devices List
+		var media = [ 
+					{'name': 'BigBuck-P1', 'url': '/resources/videos/BigBuck.m4v', 'cover':'/resources/img/cover.png'}, 
+					{'name': 'BigBuck-P2', 'url': '/resources/videos/BigBuck2.mp4', 'cover':'/resources/img/cover2.png'}
+					];
+		
+		response.send(JSON.stringify(media, null, 4), {"Content-Type": "application/json"});
+});
+
 // General Static Files
 server.use(express.static(__dirname + '/public'));
 

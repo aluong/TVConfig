@@ -1,9 +1,9 @@
 Ext.application({
 	name: 'IGLoo',
 
-	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails', 'DevicesList'],
-	stores: ['DevicesStore'],
-	models: ['Device'], 
+	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails', 'DevicesList', 'MediaList'],
+	stores: ['DevicesStore', 'MediaStore'],
+	models: ['Device', 'Media'], 
 	controllers: ['ConfigureController', 'DevicesController', 'AddSessionController'],
 	requires: ['Ext.MessageBox'],
 	
@@ -51,8 +51,8 @@ Ext.application({
 					
 					// Load Devices and Sessions
 					// Initial Delay 1 second
-					Ext.defer(now.serverLoadDevices,1000);
-					Ext.defer(now.serverLoadSessions,1000);
+					Ext.defer(now.serverLoadDevices,200);
+					Ext.defer(now.serverLoadSessions,200);
 					
 				});
 			},
