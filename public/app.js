@@ -1,7 +1,7 @@
 Ext.application({
 	name: 'IGLoo',
 
-	views: ['DeviceIcon','VideoPanel','ConfigurePanel','MainPanel', 'SessionPanel', 'SessionDetails', 'DevicesList'],
+	views: ['DeviceIcon','VideoPanel','ConfigurePanel', 'SessionPanel', 'SessionDetails', 'DevicesList'],
 	stores: ['DevicesStore'],
 	models: ['Device'], 
 	controllers: ['ConfigureController', 'DevicesController', 'AddSessionController'],
@@ -35,7 +35,7 @@ Ext.application({
 			function (buttonId, name) {
 	
 				// Add Main Panel
-				Ext.Viewport.add(Ext.create('IGLoo.view.MainPanel'));
+				Ext.Viewport.add(Ext.create('IGLoo.view.ConfigurePanel'));
 	
 				now.ready(function(){
 					

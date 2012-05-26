@@ -73,6 +73,9 @@ Ext.define('IGLoo.view.ConfigurePanel',{
 			},
 			{
 				xtype: 'sessionDetails'
+			},
+			{
+				xtype: 'videopanel'
 			}
 		]
     }

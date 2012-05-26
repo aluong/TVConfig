@@ -18,7 +18,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 				items: [
 					{
 				        xtype: 'spacer',
-				    	flex:1
+				    	width: 10
 					},
 					{
 						xtype:'button',
@@ -37,7 +37,30 @@ Ext.define('IGLoo.view.SessionPanel', {
 					},
 					{
 				    	xtype: 'spacer',
-				       	flex:1
+				       	width: 10
+				    },
+				    {
+						xtype:'button',
+						text:'Watch Video',
+						flex: 2,
+						style:[
+							'height:20px;',
+							'width:100px;',
+							'float:right;'
+						].join(''),
+						handler: function(){
+							var videoPanel = Ext.getCmp('video-panel');
+							if(videoPanel.isHidden()){
+								videoPanel.show('pop');
+							}
+							else{
+								videoPanel.hide();
+							}
+						}
+				    },
+				    {
+				    	xtype: 'spacer',
+				       	width: 10
 				    }
 				]
 			}
