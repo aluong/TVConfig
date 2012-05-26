@@ -27,8 +27,22 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			// Update the Devices List
         			var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
         			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
-					sessionDetailStore.load();
-					
+					sessionDetailStore.load({
+						//call back after the store has been loaded
+						callback: function(records, operation, success){
+							var index = sessionDetailStore.findExact('cId', IGLoo.cId);
+							var model = sessionDetailStore.getAt(index);
+							var deleteButton = Ext.getCmp('delete-session-button');
+							if(index === -1 || model.getData().leader !== 1){
+								deleteButton.hide();
+							}
+							else{
+								deleteButton.show();
+							}
+						},
+						scope:this
+					});
+
 					// lock config panel
 					Ext.getCmp('config-panel').setScrollable(false);
         		},

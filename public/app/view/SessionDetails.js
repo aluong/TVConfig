@@ -54,6 +54,7 @@ Ext.define('IGLoo.view.SessionDetails', {
 			},
 			{
 				xtype: 'button',
+				id: 'delete-session-button',
 				text: 'Delete Session'
 			}
 		]
