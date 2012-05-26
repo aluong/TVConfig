@@ -11,7 +11,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
         		tap: function() {
 					console.log("Request to Add Session")
 					// Create a New Session
-					var sid = 'session-'+IGLoo.dId+'-'+IGLoo.cId+'-'+IGLoo.sessions.nextId;
+					var sid = 'session-'+IGLoo.name+'-'+IGLoo.cId+'-'+IGLoo.sessions.nextId;
 					now.serverCreateSession(sid);
 					IGLoo.sessions.nextId += 1;
 					

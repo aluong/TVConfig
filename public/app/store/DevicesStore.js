@@ -3,7 +3,7 @@ Ext.define('IGLoo.store.DevicesStore', {
     config: {
     	storeId: 'DevicesStore',
      	model: 'IGLoo.model.Device',
-     	sorters: 'device',
+     	sorters: 'name',
 		proxy: {
 				type: 'ajax',
 				url : '/sessionDevices?sId=',

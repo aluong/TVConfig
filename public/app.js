@@ -23,12 +23,12 @@ Ext.application({
 		IGLoo.devices = {};
 		IGLoo.sessions = {};
 		IGLoo.sessions.nextId = 0;
-		IGLoo.dId = ''; // Device name ex: "iPad"
+		IGLoo.name = ''; // Device name ex: "iPad"
 		IGLoo.cId = ''; // ClientId from socket.io
 		IGLoo.offset = {}; // Offset for devices
 		IGLoo.offset.x = 100;
 		IGLoo.offset.y = 100;
-		
+				
 		Ext.Msg.prompt(
 			'Device Connected!',
 			'What is your device\'s name?',
@@ -43,11 +43,11 @@ Ext.application({
 					nowJSfunctionDefinitions();
 					
 					// Add user's name
-					IGLoo.dId = 'device-'+name;
-					now.dId = IGLoo.dId;
+					IGLoo.name = name;
+					now.name = name;
 					
 					// Add Device to Server
-					now.serverAddDevice(IGLoo.dId);
+					now.serverAddDevice(name);
 					
 					// Load Devices and Sessions
 					// Initial Delay 1 second
@@ -75,14 +75,13 @@ nowJSfunctionDefinitions = function() {
 	};
 	
 	// Adds device to device list and creates new item
-	now.clientAddDevice = function(dId) {
-		var deviceName = dId.substring(7);
-		if(!IGLoo.devices[dId]) {							
+	now.clientAddDevice = function(deviceName, cId) {
+		if(!IGLoo.devices[cId]) {							
 			var configPanel = Ext.getCmp('config-panel');		
 			configPanel.add( {
 				xclass: 'IGLoo.view.DeviceIcon',
 				name: deviceName,
-				id: dId,
+				id: cId,
 				items: [
 					{
 						html:[
@@ -93,22 +92,22 @@ nowJSfunctionDefinitions = function() {
 					}
 				]
 			});
-			IGLoo.devices[dId] = true
-			console.log("Device Added: "+dId);
+			IGLoo.devices[cId] = true
+			console.log("Device Added: "+cId);
 		}
 		else {
-			console.log("Device Exists: "+dId);
+			console.log("Device Exists: "+cId);
 		}
 	};
 	
 	// Remove Device
-	now.clientRemoveDevice = function(dId) {
-		IGLoo.devices[dId] = false;
+	now.clientRemoveDevice = function(cId) {
+		IGLoo.devices[cId] = false;
 		var configPanel = Ext.getCmp('config-panel');
 		for(var i = 5; i < configPanel.getItems().length; i++ ) {
-			if(configPanel.getAt(i).getId() == dId) {
+			if(configPanel.getAt(i).getId() == cId) {
 				configPanel.getAt(i).destroy()
-				console.log("Device Removed: "+dId);
+				console.log("Device Removed: "+cId);
 			}
 		}
 	}

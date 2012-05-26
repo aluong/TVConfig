@@ -24,8 +24,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 				},
 				dragend:function(e){
 					// Grab Device
-					var dId = e.getTarget().id;
-					var device = Ext.getCmp(dId);
+					var cId = e.getTarget().id;
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
 					// Determine what session is the device located
@@ -39,7 +38,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 						if(!sessionRegion.isOutOfBound(dragPoint)) {
 							
 							// Add Device to Session
-							now.serverAddDeviceToSession(dId, sId);
+							now.serverAddDeviceToSession(cId, sId);
 							
 							deviceInSession = true;
 						}
@@ -50,12 +49,12 @@ Ext.define('IGLoo.controller.DevicesController',{
 					if(!deviceInSession) {
 						
 						// Remove device from its previous session
-						now.serverRemoveDeviceFromSession(dId);
+						now.serverRemoveDeviceFromSession(cId);
 						
 						// Reset the Device (Snap back to offset)
-						now.serverSetDeviceOffset(dId, IGLoo.offset.x, IGLoo.offset.y);
+						now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
 						
-            			console.log("Device is not in a session: "+dId);
+            			console.log("Device is not in a session: "+cId);
 					}
 					
 					var configpanel = Ext.getCmp('config-panel');
@@ -66,13 +65,13 @@ Ext.define('IGLoo.controller.DevicesController',{
     }
 });
 
-now.clientMoveDeviceIconToSession = function(dId, sId) {
-	console.log("Device: "+dId+" Moved To Session: "+sId);
+now.clientMoveDeviceIconToSession = function(cId, sId) {
+	console.log("Device: "+cId+" Moved To Session: "+sId);
 	var sessionRegion = Ext.util.Region.getRegion(sId);
-	Ext.getCmp(dId).getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
+	Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
 };
 
-now.clientSetDeviceOffset = function(dId, x, y) {
-	console.log('Device: '+dId+" offset to ("+x+', '+y+')');
-	Ext.getCmp(dId).getDraggable().setOffset(x,y);	
+now.clientSetDeviceOffset = function(cId, x, y) {
+	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
+	Ext.getCmp(cId).getDraggable().setOffset(x,y);	
 };
