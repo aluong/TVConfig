@@ -1,16 +1,19 @@
 Ext.define('IGLoo.view.DevicesItem', {
     extend: 'Ext.dataview.component.DataItem',
 	xtype: 'devicesitem',
-    config: {
+	requires: ['Ext.Img']
+,    config: {
         dataMap: {
 			getName: {
 				setHtml: 'name'
 			}
         },
 
-       	image:{
-       		width: '35%'
-        },
+       	image: {
+       		width: '70px',
+       		height: '89px',
+       		src: "/resources/img/ipad-icon.jpg"
+       	},
 		name: true,
         
 		layout: {
@@ -21,7 +24,7 @@ Ext.define('IGLoo.view.DevicesItem', {
     },
 
     applyImage: function(config) {
-        return Ext.factory(config, 'Ext.Component', this.getImage());
+        return Ext.factory(config, 'Ext.Img', this.getImage());
     },
 
     updateImage: function(newImage, oldImage) {
@@ -49,7 +52,6 @@ Ext.define('IGLoo.view.DevicesItem', {
 	},
 	updateRecord: function(record) {
 		this.callParent(arguments);
-		this.getImage().setHtml("<img src='resources/img/ipad-icon.jpg' style='width:30%;'/>");
 		if(record.get('leader') == 1) {
 			this.getName().setHtml("<b>"+this.getName().getHtml()+" (Session Leader)<b>");
 		}

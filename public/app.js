@@ -85,7 +85,7 @@ nowJSfunctionDefinitions = function() {
 				items: [
 					{
 						html:[
-							"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
+							"<img src='resources/img/ipad-icon.jpg'/>",
 							"<p>",deviceName,"</p>"
 						].join(''),
 						zindex:1

@@ -10,12 +10,11 @@ Ext.define('IGLoo.view.DeviceIcon', {
 		cls:'deviceicon',
 		left: 0,
 		top:0,
-		width:'10%',
 		name: "Current Device",
 		items:[
 			{
 				html:[
-					"<img src='resources/img/ipad-icon.jpg' style='width:90%;'/>",
+					"<img src='resources/img/ipad-icon.jpg'/>",
 					"<p>DEFAULT NAME/p>"
 				].join('')
 			}
