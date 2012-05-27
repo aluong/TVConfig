@@ -36,6 +36,9 @@ Ext.define('IGLoo.controller.DevicesController',{
 					if(cId !== IGLoo.cId){
 						var icon = Ext.getCmp(cId);
 						icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
+						var configpanel = Ext.getCmp('config-panel');
+						configpanel.setScrollable(true);
+
 						return;
 					}
 					
