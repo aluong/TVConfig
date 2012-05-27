@@ -64,6 +64,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 						now.serverRemoveDeviceFromSession(IGLoo.cId, cId, function(aborted){
 							//abort callback
 							if(aborted){
+								//if aborted then revert back
 								var icon = Ext.getCmp(cId);
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 							}else{

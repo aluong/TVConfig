@@ -148,22 +148,22 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	// Ignore adding to the same session
 	if(device['sId'] == sId) {
 		console.log(cId+" already in this session "+sId+", so device not added.");
-		return;
 	}
+	else{
+		// Update NowJS group
+		var sessionGroup = now.getGroup(sId);
+		sessionGroup.addUser(cId)
 	
-	// Update NowJS group
-	var sessionGroup = now.getGroup(sId);
-	sessionGroup.addUser(cId)
-	
-	//check session list
-	console.log('sessions[sId] (addDevice)='+sessions[sId]);
+		//check session list
+		console.log('sessions[sId] (addDevice)='+sessions[sId]);
 
-	// Remove user from old session
-	this.now.serverRemoveDeviceFromSession(cId, cId, null, device['sId']);
+		// Remove user from old session
+		this.now.serverRemoveDeviceFromSession(cId, cId, null, device['sId']);
 	
-	// Update Server's database
-	device['sId'] = sId;
-	
+		// Update Server's database
+		device['sId'] = sId;
+		console.log('Client: '+cId+' added to Session: '+sId);
+	}
 	// Tell all Clients to move Device Icon into session
 	var k = 0;
 	for(var i = 0; i < devices.length; i++){
@@ -172,8 +172,6 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 			k++;
 		}
 	}
-	
-	console.log('Client: '+cId+' added to Session: '+sId);
 }
 
 // Removes Device from a Session
