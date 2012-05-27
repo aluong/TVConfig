@@ -70,13 +70,6 @@ Ext.define('IGLoo.controller.DevicesController',{
 								now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
 							}
 						});
-						//if(aborted['setted']){
-						//	commitDrag = false;
-						//}
-						//{
-						//	// Reset the Device (Snap back to offset)
-						//	now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
-						//}
             			console.log("Device is not in a session: "+cId);
 					}
 					

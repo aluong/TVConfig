@@ -180,7 +180,7 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 // If the session becomes empty, delete it
 // Call Path: 1 Client -> Server -> 1 Clients
 // Updates Session Leader on the server if needed
-// aborted acts as a callback param
+// abortedCB is a callback with param which indicates aborted or not
 everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedCB, sId) {
 	var opDevice = devices.findDevice(operatorCID);
 	
