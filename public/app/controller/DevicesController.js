@@ -82,15 +82,13 @@ Ext.define('IGLoo.controller.DevicesController',{
     }
 });
 
-now.clientMoveDeviceIconToSession = function(cId, sId) {
-	console.log("Device: "+cId+" Moved To Session: "+sId);
+now.clientMoveDeviceIconToSession = function(cId, sId, indent) {
+	console.log("Device: "+cId+" Moved To Session: "+sId + " with indent "+indent);
 	var sessionRegion = Ext.util.Region.getRegion(sId);
-	if(Ext.getCmp(cId).getDraggable())
-		Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
+	Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left+100*indent, sessionRegion.top);
 };
 
-now.clientSetDeviceOffset = function(cId, x, y) {
+now.clientSetDeviceOffset = function(cId, x, y, indent) {
 	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
-	if(Ext.getCmp(cId).getDraggable())
-		Ext.getCmp(cId).getDraggable().setOffset(x,y);	
+	Ext.getCmp(cId).getDraggable().setOffset(x+100*indent,y);	
 };

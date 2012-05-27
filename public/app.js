@@ -102,6 +102,8 @@ nowJSfunctionDefinitions = function() {
 		else {
 			console.log("Device Exists: "+cId);
 		}
+		//
+		now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
 	};
 	
 	// Remove Device

@@ -129,7 +129,7 @@ everyone.now.serverLoadSessions = function() {
 			// Move Devices to Session
 			now.getGroup(sId).getUsers(function (usersList) { 
 				for (var i = 0; i < usersList.length; i++) {
-					targetClient.now.clientMoveDeviceIconToSession(usersList[i], sId);
+					targetClient.now.clientMoveDeviceIconToSession(usersList[i], sId, i);
 				}
 			});
 		}
@@ -161,7 +161,13 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	device['sId'] = sId;
 	
 	// Tell all Clients to move Device Icon into session
-	everyone.now.clientMoveDeviceIconToSession(cId, sId);
+	var k = 0;
+	for(var i = 0; i < devices.length; i++){
+		if(devices[i]['sId'] == sId){
+			everyone.now.clientMoveDeviceIconToSession(devices[i]['cId'], sId, k);
+			k++;
+		}
+	}
 	
 	console.log('Client: '+cId+' added to Session: '+sId);
 }
@@ -215,7 +221,16 @@ everyone.now.serverRemoveDeviceFromSession = function(cId, sId) {
 // Call Path: 1 Client -> Server -> All Clients
 everyone.now.serverSetDeviceOffset = function(cId, x, y) {
 	console.log('Setting '+cId+"'s offset to ("+x+', '+y+')');
-	everyone.now.clientSetDeviceOffset(cId, x, y);
+	
+	var k = 0;
+	for(var i = 0; i < devices.length; i++){
+		if(devices[i]['sId'] == null){
+			everyone.now.clientSetDeviceOffset(devices[i]['cId'], x, y, k);
+			k++;
+		}
+	}
+	
+	
 }
 
 // Registers Device to Server
@@ -279,6 +294,16 @@ Array.prototype.findDevice = function(cId) {
     }
   }
   return device;
+}
+
+Array.prototype.countDevicesInSession = function(sId) {
+	var count = 0;
+	for(var i = 0; i < this.length; i++) {
+		if(this[i]['sId'] == sId){
+			count++;
+		}
+	}
+	return count;
 }
 
 Array.prototype.removeDevice = function(cId) {
