@@ -6,7 +6,7 @@ Ext.define('IGLoo.controller.MediaListController', {
 		},
 		control: {
 			mediaList: {
-				itemtap:function(dv, index, item, e){
+				itemdoubletap:function(dv, index, item, e){
 					var url = dv.getStore().getAt(index).getData().url;
 					var cover = dv.getStore().getAt(index).getData().cover;
 					//set up the video panel

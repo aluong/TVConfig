@@ -14,7 +14,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
     config: {
         refs: {
         	sessionDetails: '#session-details',
-            deleteSessionsButton: '#session-details button'
+            deleteSessionsButton: '#delete-session-button'
         },
         control: {
         	sessionDetails: {
