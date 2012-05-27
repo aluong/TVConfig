@@ -10,8 +10,16 @@ Ext.define('IGLoo.controller.DevicesController',{
 	            dragstart:function(e){
 					var configpanel = Ext.getCmp('config-panel');
 					configpanel.setScrollable(false);
+					var icon = Ext.getCmp(e.getTarget().id);
+					IGLoo.tmpOffset.x = icon.getDraggable().offset.x;
+					IGLoo.tmpOffset.y = icon.getDraggable().offset.y;
 				},
 				drag:function(e) {
+					var cId = e.getTarget().id;
+					if(cId !== IGLoo.cId){
+						return;
+					}
+
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
 					Ext.each(sessionpanels, function(session) {
@@ -25,6 +33,12 @@ Ext.define('IGLoo.controller.DevicesController',{
 				dragend:function(e){
 					// Grab Device
 					var cId = e.getTarget().id;
+					if(cId !== IGLoo.cId){
+						var icon = Ext.getCmp(cId);
+						icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
+						return;
+					}
+					
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
 					// Determine what session is the device located
@@ -68,10 +82,12 @@ Ext.define('IGLoo.controller.DevicesController',{
 now.clientMoveDeviceIconToSession = function(cId, sId) {
 	console.log("Device: "+cId+" Moved To Session: "+sId);
 	var sessionRegion = Ext.util.Region.getRegion(sId);
-	Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
+	if(Ext.getCmp(cId).getDraggable())
+		Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left, sessionRegion.top);
 };
 
 now.clientSetDeviceOffset = function(cId, x, y) {
 	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
-	Ext.getCmp(cId).getDraggable().setOffset(x,y);	
+	if(Ext.getCmp(cId).getDraggable())
+		Ext.getCmp(cId).getDraggable().setOffset(x,y);	
 };

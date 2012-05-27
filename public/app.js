@@ -30,6 +30,7 @@ Ext.application({
 		IGLoo.offset = {}; // Offset for devices
 		IGLoo.offset.x = 100;
 		IGLoo.offset.y = 100;
+		IGLoo.tmpOffset = {}; // tmp offset used to record the location
 				
 		Ext.Msg.prompt(
 			'Device Connected!',
@@ -96,6 +97,7 @@ nowJSfunctionDefinitions = function() {
 			});
 			IGLoo.devices[cId] = true
 			console.log("Device Added: "+cId);
+
 		}
 		else {
 			console.log("Device Exists: "+cId);
