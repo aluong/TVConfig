@@ -64,8 +64,8 @@ var everyone = now.initialize(server);
 var devices = [];
 
 // List of sessions registered to the server (sId -> session leader (clientId) )
-var sessions = [];
-
+//var sessions = [];
+var sessions = {}; //Since the session-id is no longer a int here
 
 // Creates a new Session
 // Call Path: 1 Client -> Server -> All clients
@@ -74,6 +74,7 @@ everyone.now.serverCreateSession = function(sId) {
 	
 	// Update Server's Session Leader
 	sessions[sId] = this.user.clientId;
+	console.log('sessions[sId]='+sessions[sId]);
 	
 	// Update all current user's sessions
 	everyone.now.clientAddSession(sId);
@@ -104,7 +105,7 @@ everyone.now.serverDeleteSession = function(sId) {
 	now.getGroup(sId).getUsers(function (usersList) { 
 		for (var i = 0; i < usersList.length; i++) {
 			now.getClient(usersList[i], function() {
-				this.now.serverRemoveDeviceFromSession(usersList[i], sId);
+				this.now.serverRemoveDeviceFromSession(userList[i], usersList[i], null, sId);
 				everyone.now.serverSetDeviceOffset(usersList[i], 100, 100);
 			});
 		}
@@ -153,9 +154,12 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	// Update NowJS group
 	var sessionGroup = now.getGroup(sId);
 	sessionGroup.addUser(cId)
+	
+	//check session list
+	console.log('sessions[sId] (addDevice)='+sessions[sId]);
 
 	// Remove user from old session
-	this.now.serverRemoveDeviceFromSession(cId, device['sId']);
+	this.now.serverRemoveDeviceFromSession(cId, cId, null, device['sId']);
 	
 	// Update Server's database
 	device['sId'] = sId;
@@ -176,18 +180,34 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 // If the session becomes empty, delete it
 // Call Path: 1 Client -> Server -> 1 Clients
 // Updates Session Leader on the server if needed
-everyone.now.serverRemoveDeviceFromSession = function(cId, sId) {
+// aborted acts as a callback param
+everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedCB, sId) {
+	var opDevice = devices.findDevice(operatorCID);
+	
 	var targetClient = this;
 	var device = devices.findDevice(cId);
 	// Device was never in a session or already removed
 	if(device['sId'] == null) {
 		console.log(cId+" not removed because was not in a session or already removed.");
+		if(abortedCB){
+			abortedCB(false);
+		}
 		return;
 	}
 	// If sId is not specified, remove device from previous session
 	else if(sId == null) {
 		sId = device['sId'];
 	}
+	
+	if(!(operatorCID == cId || (device['sId'] == opDevice['sId'] && sessions[sId] == operatorCID ))){
+		//should abort
+		console.log('cancle REMOVE');
+		if(abortedCB){
+			abortedCB(true);
+		}
+		return;
+	}
+	console.log('Commit REMOVE');
 	
 	// Update NowJS group
 	var sessionGroup = now.getGroup(sId);
@@ -215,6 +235,9 @@ everyone.now.serverRemoveDeviceFromSession = function(cId, sId) {
 		}
 	  }
 	});	
+	if(abortedCB){
+		abortedCB(false);
+	}
 }
 
 // Called from one client to move a devices to (x,y) for all devices 
@@ -269,7 +292,7 @@ everyone.disconnected(function() {
 	
 	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
 		everyone.now.clientRemoveDevice(this.user.clientId);
-		everyone.now.serverRemoveDeviceFromSession(this.user.clientId, null);
+		everyone.now.serverRemoveDeviceFromSession(this.user.clientId,this.user.clientId, null, null);
 		devices.removeDevice(this.user.clientId);
 		console.log(this.user.clientId+" removed from server.")
 	}
