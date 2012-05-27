@@ -169,6 +169,9 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 		}
 	}
 	
+	// Reload Session-Details
+	everyone.now.reloadSessionDetails(sId);
+	
 	console.log('Client: '+cId+' added to Session: '+sId);
 }
 
@@ -213,6 +216,9 @@ everyone.now.serverRemoveDeviceFromSession = function(cId, sId) {
 				console.log('New Session Leader for '+sId+' is '+cId);
 			});
 		}
+		
+		// Reload Session-Details
+		everyone.now.reloadSessionDetails(sId);
 	  }
 	});	
 }

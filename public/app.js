@@ -132,12 +132,16 @@ nowJSfunctionDefinitions = function() {
 	
 	// Delete Session
 	now.clientDeleteSession = function(sId) {
+		// Hide Session if viewing the one getting deleted
+		if(Ext.getCmp('session-details').currentSession == sId) {
+			Ext.getCmp('session-details').hide();
+		}
+		
 		if(IGLoo.sessions[sId]) {
 			Ext.getCmp(sId).destroy();
 			console.log("Session Deleted: "+sId);
 		}
 		IGLoo.sessions[sId] = false;
-		Ext.getCmp('session-details').hide();
 	};
 
 };
