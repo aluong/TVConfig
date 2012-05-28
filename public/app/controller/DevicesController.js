@@ -41,20 +41,20 @@ Ext.define('IGLoo.controller.DevicesController',{
 					var sessionRegion = Ext.util.Region.getRegion(session.getId());
 					var sId = session.getId();
 					
-						// Found a session with the device
+					// Found a session with the device
 					if(!sessionRegion.isOutOfBound(dragPoint)) {
 						if(cId == IGLoo.cId){
-								// Add Device to Session
+							// Add Device to Session
 							now.serverAddDeviceToSession(cId, sId);
-							//set session-id
-							IGLoo.sId = sId;
-							//show the watch button
 							
-							//query the watch button
-							//please change it if you know a better method 
-							var buttons = Ext.ComponentQuery.query('#'+sId+' button');
-							var watchButton = buttons[1];
-							watchButton.show();
+							// Hide old watch button
+							IGLoo.hideWatchButton(sId);
+							
+							// Set session-id
+							IGLoo.sId = sId;
+							
+							// Show the watch button
+							IGLoo.showWatchButton(sId);
 
 							deviceInSession = true;
 						}else{
@@ -78,7 +78,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 							}else{
 								now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
-								//hide the watch button
+								
 								//notify cId to hide watch button of sId
 								now.serverHideWatchButton(cId, IGLoo.sId);
 							}
@@ -110,14 +110,8 @@ now.clientSetDeviceOffset = function(cId, x, y, indent) {
 	Ext.getCmp(cId).getDraggable().setOffset(x+100*indent,y);	
 };
 
-now.clientHideWatchButton = function(cId, sId){
-	console.log('Request Device: '+cId+' to remove watch button from Session: '+ sId);
-	if(IGLoo.cId === cId){
-		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
-		var watchButton = buttons[1];
-		watchButton.hide();
-		//set the session-id here
-		//since it was dragged out by the leader
-		IGLoo.sId = '';
-	}
+// Called from a Session Leader Client
+now.clientHideWatchButton = function(sId){
+	console.log('Request to remove watch button from Session: '+ sId);
+	IGLoo.hideWatchButton(sId);
 }

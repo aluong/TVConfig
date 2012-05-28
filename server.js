@@ -104,7 +104,7 @@ everyone.now.serverDeleteSession = function(sId) {
 	now.getGroup(sId).getUsers(function (usersList) { 
 		for (var i = 0; i < usersList.length; i++) {
 			now.getClient(usersList[i], function() {
-				this.now.serverRemoveDeviceFromSession(userList[i], usersList[i], null, sId);
+				this.now.serverRemoveDeviceFromSession(usersList[i], usersList[i], null, sId);
 				everyone.now.serverSetDeviceOffset(usersList[i], 100, 100);
 			});
 		}
@@ -114,9 +114,12 @@ everyone.now.serverDeleteSession = function(sId) {
 	everyone.now.serverLoadSessions();
 }
 
-//notify cId to hide the watch button of sId
+//notify client with this cId to hide the watch button of sId
 everyone.now.serverHideWatchButton = function(cId, sId){
-	everyone.now.clientHideWatchButton(cId,sId);
+	console.log('Hiding '+cId+' watch video button for session '+sId);
+	now.getClient(cId, function() {
+				this.now.clientHideWatchButton(sId);
+			});
 }
 
 
@@ -263,8 +266,6 @@ everyone.now.serverSetDeviceOffset = function(cId, x, y) {
 			k++;
 		}
 	}
-	
-	
 }
 
 // Registers Device to Server

@@ -11,13 +11,19 @@ Ext.define('IGLoo.controller.AddSessionController',{
         		tap: function() {
 					console.log("Request to Add Session")
 					// Create a New Session
-					var sid = 'session-'+IGLoo.name+'-'+IGLoo.cId+'-'+IGLoo.sessions.nextId;
-					now.serverCreateSession(sid);
+					var sId = 'session-'+IGLoo.name+'-'+IGLoo.cId+'-'+IGLoo.sessions.nextId;
+					now.serverCreateSession(sId);
 					IGLoo.sessions.nextId += 1;
-					//set isLeader
+					
+					// Set isLeader
 					IGLoo.isLeader = true;
-					//set session-id
-					IGLoo.sId = sid;
+					
+					// Hide old Session Watch
+					IGLoo.hideWatchButton(IGLoo.sId);
+					
+					// Set session-id
+					IGLoo.sId = sId;
+					
 					Ext.getCmp('add-session-panel').hide();	
         		}
         	},

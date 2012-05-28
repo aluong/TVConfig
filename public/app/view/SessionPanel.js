@@ -68,3 +68,24 @@ Ext.define('IGLoo.view.SessionPanel', {
 		]
 	}
 });
+
+// Show Watch Button
+IGLoo.showWatchButton = function(sId) {
+	if(sId != null) {
+		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
+		var watchButton = buttons[1];
+		watchButton.show();
+	}
+}
+
+// Hide Watch Button
+IGLoo.hideWatchButton = function(sId) {
+	if(sId != null) {
+		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
+		var watchButton = buttons[1];
+		watchButton.hide();
+	}
+}
+
+
+
