@@ -172,6 +172,11 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 			k++;
 		}
 	}
+	
+	// Reload Session-Details
+	everyone.now.reloadSessionDetails(sId);
+	
+	console.log('Client: '+cId+' added to Session: '+sId);
 }
 
 // Removes Device from a Session
@@ -231,6 +236,9 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 				console.log('New Session Leader for '+sId+' is '+cId);
 			});
 		}
+		
+		// Reload Session-Details
+		everyone.now.reloadSessionDetails(sId);
 	  }
 	});	
 	if(abortedCB){

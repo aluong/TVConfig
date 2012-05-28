@@ -8,8 +8,8 @@ Ext.define('IGLoo.view.SessionDetails', {
 		hideOnMaskTap: true,
 		centered: true,
 		hidden: true,
-		width: '80%',
-		height: '80%',
+		width: '90%',
+		height: '90%',
 		zIndex: 100000,
 		layout: 'vbox',
 		items: [

@@ -14,7 +14,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
     config: {
         refs: {
         	sessionDetails: '#session-details',
-            deleteSessionsButton: '#session-details button'
+            deleteSessionsButton: '#delete-session-button'
         },
         control: {
         	sessionDetails: {
@@ -23,9 +23,9 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			
         			// Update Session Label
         			sessionDetailsPanel.getAt(0).setHtml('<center>'+sessionDetailsPanel.currentSession+'<center>');
-        		
+
         			// Update the Devices List
-        			var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
+        			/*var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
         			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
 					sessionDetailStore.load({
 						//call back after the store has been loaded
@@ -41,7 +41,8 @@ Ext.define('IGLoo.controller.ConfigureController',{
 							}
 						},
 						scope:this
-					});
+					});*/
+        			now.reloadSessionDetails(sessionDetailsPanel.currentSession);
 
 					// lock config panel
 					Ext.getCmp('config-panel').setScrollable(false);
@@ -65,3 +66,28 @@ Ext.define('IGLoo.controller.ConfigureController',{
         }
     }
 });
+
+
+now.reloadSessionDetails = function(sId) {
+	var sessionDetailsPanel = Ext.getCmp('session-details');
+	var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
+	if(sId == sessionDetailsPanel.currentSession) {
+		console.log('Reloading Session Details: '+sId);
+		sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
+		sessionDetailStore.load({
+			//call back after the store has been loaded
+			callback: function(records, operation, success){
+				var index = sessionDetailStore.findExact('cId', IGLoo.cId);
+				var model = sessionDetailStore.getAt(index);
+				var deleteButton = Ext.getCmp('delete-session-button');
+				if(index === -1 || model.getData().leader !== 1){
+					deleteButton.hide();
+				}
+				else{
+					deleteButton.show();
+				}
+			},
+			scope:this
+		});
+	}
+}
