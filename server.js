@@ -105,10 +105,11 @@ everyone.now.serverDeleteSession = function(sId) {
 		for (var i = 0; i < usersList.length; i++) {
 			now.getClient(usersList[i], function() {
 				this.now.serverRemoveDeviceFromSession(usersList[i], usersList[i], null, sId);
-				everyone.now.serverSetDeviceOffset(usersList[i], 100, 100);
 			});
 		}
+		serverSetDevicesOffset(null, everyone);
 	});
+	
 	
 	// Update Positioning of Devices
 	everyone.now.serverLoadSessions();
@@ -136,11 +137,7 @@ everyone.now.serverLoadSessions = function() {
 			this.now.clientAddSession(sId);
 			
 			// Move Devices to Session
-			now.getGroup(sId).getUsers(function (usersList) { 
-				for (var i = 0; i < usersList.length; i++) {
-					targetClient.now.clientMoveDeviceIconToSession(usersList[i], sId, i);
-				}
-			});
+			serverSetDevicesOffset(sId, targetClient);
 		}
 	}
 	console.log(this.user.clientId+' Loading Completed');
@@ -173,13 +170,7 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 		console.log('Client: '+cId+' added to Session: '+sId);
 	}
 	// Tell all Clients to move Device Icon into session
-	var k = 0;
-	for(var i = 0; i < devices.length; i++){
-		if(devices[i]['sId'] == sId){
-			everyone.now.clientMoveDeviceIconToSession(devices[i]['cId'], sId, k);
-			k++;
-		}
-	}
+	serverSetDevicesOffset(sId, everyone);
 	
 	// Reload Session-Details
 	everyone.now.reloadSessionDetails(sId);
@@ -227,6 +218,9 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	// Update Server's database on what session is the device in
 	device['sId'] = null;
 	
+	// Update sId on the client side
+	this.now.clientSetSId(null); 
+	
 	console.log('Client: '+cId+' removed from Session: '+sId);	
 	
 	// Delete Empty Session
@@ -247,6 +241,9 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		
 		// Reload Session-Details
 		everyone.now.reloadSessionDetails(sId);
+		
+		// Reload Session, missing a device
+		serverSetDevicesOffset(sId, everyone);
 	  }
 	});	
 	if(abortedCB){
@@ -256,17 +253,26 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 
 // Called from one client to move a devices to (x,y) for all devices 
 // Call Path: 1 Client -> Server -> All Clients
-everyone.now.serverSetDeviceOffset = function(cId, x, y) {
-	console.log('Setting '+cId+"'s offset to ("+x+', '+y+')');
-	
+// sId == Null : device List
+everyone.now.serverSetDevicesOffset = function(sId, target) {
+	if(target == null) {
+		target = everyone;
+	}
+	serverSetDevicesOffset(sId, target);
+}
+
+// Helper Function
+serverSetDevicesOffset = function(sId, target) {
+	console.log('Setting offset for:'+sId);
 	var k = 0;
 	for(var i = 0; i < devices.length; i++){
-		if(devices[i]['sId'] == null){
-			everyone.now.clientSetDeviceOffset(devices[i]['cId'], x, y, k);
+		if(devices[i]['sId'] == sId) {
+			target.now.clientSetDeviceOffset(devices[i]['cId'], k, sId);
 			k++;
 		}
 	}
 }
+
 
 // Registers Device to Server
 // Call Path: 1 Client -> Server -> All Clients
@@ -281,6 +287,7 @@ everyone.now.serverAddDevice = function(name) {
 	
 	// Update all current user's devices
 	everyone.now.clientAddDevice(name, this.user.clientId);
+	
 };
 
 // Loads all the devices for a client
@@ -291,6 +298,9 @@ everyone.now.serverLoadDevices = function() {
 		console.log("Load device: "+devices[i]['name']);
 		this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
 	}
+	
+	// Update Devices Offsets
+	serverSetDevicesOffset(null, this);
 }
 
 // Client Disconnected

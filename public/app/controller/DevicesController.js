@@ -51,7 +51,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 							IGLoo.hideWatchButton(sId);
 							
 							// Set session-id
-							IGLoo.sId = sId;
+							now.clientSetSId(sId);
 							
 							// Show the watch button
 							IGLoo.showWatchButton(sId);
@@ -72,15 +72,20 @@ Ext.define('IGLoo.controller.DevicesController',{
 						// it's possible that server will choose not to commit the REMOVE
 						now.serverRemoveDeviceFromSession(IGLoo.cId, cId, function(aborted){
 							//abort callback
-							if(aborted){
+							if(aborted) {
 								//if aborted then revert back
 								var icon = Ext.getCmp(cId);
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
-							}else{
-								now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
+							}
+							else {
+								// Update Devices Offsets
+								now.serverSetDevicesOffset(null);
 								
 								//notify cId to hide watch button of sId
 								now.serverHideWatchButton(cId, IGLoo.sId);
+								
+								// Set session-id
+								now.clientSetSId(null);
 							}
 						});
             			console.log("Device is not in a session: "+cId);
@@ -99,15 +104,21 @@ Ext.define('IGLoo.controller.DevicesController',{
     }
 });
 
-now.clientMoveDeviceIconToSession = function(cId, sId, indent) {
-	console.log("Device: "+cId+" Moved To Session: "+sId + " with indent "+indent);
-	var sessionRegion = Ext.util.Region.getRegion(sId);
-	Ext.getCmp(cId).getDraggable().setOffset(sessionRegion.left+100*indent, sessionRegion.top);
-};
-
-now.clientSetDeviceOffset = function(cId, x, y, indent) {
+now.clientSetDeviceOffset = function(cId, index, sId) {
+	var x, y;
+	// Check if moving into session
+	if(sId == null) {
+		x = IGLoo.offset.x + (IGLoo.offset.space * index);
+		y = IGLoo.offset.y;
+	}
+	else {
+		console.log("Device: "+cId+" Moved To Session: "+sId);
+		var sessionRegion = Ext.util.Region.getRegion(sId);
+		x = sessionRegion.left + (IGLoo.offset.space * index);
+		y = sessionRegion.top;
+	}
 	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
-	Ext.getCmp(cId).getDraggable().setOffset(x+100*indent,y);	
+	Ext.getCmp(cId).getDraggable().setOffset(x,y);	
 };
 
 // Called from a Session Leader Client

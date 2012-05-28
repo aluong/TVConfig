@@ -30,6 +30,7 @@ Ext.application({
 		IGLoo.offset = {}; // Offset for devices
 		IGLoo.offset.x = 100;
 		IGLoo.offset.y = 100;
+		IGLoo.offset.space = 100;
 		IGLoo.tmpOffset = {}; // tmp offset used to record the location
 		IGLoo.isLeader = false;
 		IGLoo.sId = null;
@@ -76,7 +77,13 @@ nowJSfunctionDefinitions = function() {
 	// Set the clientId
 	now.clientSetClientId = function(cId) {
 		IGLoo.cId = cId;
-		console.log('cid: '+IGLoo.cId);
+		console.log('cId: '+IGLoo.cId);
+	};
+	
+	// Set the sId
+	now.clientSetSId = function(sId) {
+		IGLoo.sId = sId;
+		console.log('sId: '+IGLoo.sId);
 	};
 	
 	// Adds device to device list and creates new item
@@ -105,7 +112,6 @@ nowJSfunctionDefinitions = function() {
 			console.log("Device Exists: "+cId);
 		}
 
-		now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
 	};
 	
 	// Remove Device
