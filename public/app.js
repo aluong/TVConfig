@@ -128,6 +128,14 @@ nowJSfunctionDefinitions = function() {
 			console.log("Session Created: "+sId);
 		}
 		IGLoo.sessions[sId] = true;
+		//Hide the watch button if it's not the session that this device is currently in
+		if(sId !== IGLoo.sId){
+			//query the watch button
+			//please change it if you know a better method 
+			var buttons = Ext.ComponentQuery.query('#'+sId+' button');
+			var watchButton = buttons[1];
+			watchButton.hide();
+		}
 	};
 	
 	// Delete Session

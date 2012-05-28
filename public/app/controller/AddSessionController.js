@@ -16,7 +16,8 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					IGLoo.sessions.nextId += 1;
 					//set isLeader
 					IGLoo.isLeader = true;
-					
+					//set session-id
+					IGLoo.sId = sid;
 					Ext.getCmp('add-session-panel').hide();	
         		}
         	},

@@ -43,6 +43,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 						xtype:'button',
 						text:'Watch Video',
 						flex: 2,
+						cls:'watch-video-button',
 						style:[
 							'height:20px;',
 							'width:100px;',

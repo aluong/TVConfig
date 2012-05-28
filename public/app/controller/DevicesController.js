@@ -46,7 +46,16 @@ Ext.define('IGLoo.controller.DevicesController',{
 						if(cId == IGLoo.cId){
 								// Add Device to Session
 							now.serverAddDeviceToSession(cId, sId);
-						
+							//set session-id
+							IGLoo.sId = sId;
+							//show the watch button
+							
+							//query the watch button
+							//please change it if you know a better method 
+							var buttons = Ext.ComponentQuery.query('#'+sId+' button');
+							var watchButton = buttons[1];
+							watchButton.show();
+
 							deviceInSession = true;
 						}else{
 							commitDrag = false;
@@ -69,6 +78,9 @@ Ext.define('IGLoo.controller.DevicesController',{
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 							}else{
 								now.serverSetDeviceOffset(cId, IGLoo.offset.x, IGLoo.offset.y);
+								//hide the watch button
+								//notify cId to hide watch button of sId
+								now.serverHideWatchButton(cId, IGLoo.sId);
 							}
 						});
             			console.log("Device is not in a session: "+cId);
@@ -97,3 +109,15 @@ now.clientSetDeviceOffset = function(cId, x, y, indent) {
 	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
 	Ext.getCmp(cId).getDraggable().setOffset(x+100*indent,y);	
 };
+
+now.clientHideWatchButton = function(cId, sId){
+	console.log('Request Device: '+cId+' to remove watch button from Session: '+ sId);
+	if(IGLoo.cId === cId){
+		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
+		var watchButton = buttons[1];
+		watchButton.hide();
+		//set the session-id here
+		//since it was dragged out by the leader
+		IGLoo.sId = '';
+	}
+}

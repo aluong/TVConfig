@@ -74,7 +74,6 @@ everyone.now.serverCreateSession = function(sId) {
 	
 	// Update Server's Session Leader
 	sessions[sId] = this.user.clientId;
-	console.log('sessions[sId]='+sessions[sId]);
 	
 	// Update all current user's sessions
 	everyone.now.clientAddSession(sId);
@@ -114,6 +113,12 @@ everyone.now.serverDeleteSession = function(sId) {
 	// Update Positioning of Devices
 	everyone.now.serverLoadSessions();
 }
+
+//notify cId to hide the watch button of sId
+everyone.now.serverHideWatchButton = function(cId, sId){
+	everyone.now.clientHideWatchButton(cId,sId);
+}
+
 
 // Loads all the session for a client
 // Call Path: 1 Client -> Server -> 1 Client
