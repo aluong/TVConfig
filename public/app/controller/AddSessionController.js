@@ -19,10 +19,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					IGLoo.isLeader = true;
 					
 					// Hide old Session Watch
-					IGLoo.hideWatchButton(IGLoo.sId);
-					
-					// Set session-id
-					IGLoo.sId = sId;
+					now.clientHideWatchButton(IGLoo.sId);
 					
 					Ext.getCmp('add-session-panel').hide();	
         		}

@@ -43,21 +43,20 @@ Ext.define('IGLoo.controller.DevicesController',{
 					
 					// Found a session with the device
 					if(!sessionRegion.isOutOfBound(dragPoint)) {
+						
+						// Moving itself
 						if(cId == IGLoo.cId){
-							// Add Device to Session
-							now.serverAddDeviceToSession(cId, sId);
-							
+							console.log('Moving Itself to new Session');
 							// Hide old watch button
-							IGLoo.hideWatchButton(sId);
+							now.clientHideWatchButton(IGLoo.sId);
 							
-							// Set session-id
-							now.clientSetSId(sId);
-							
-							// Show the watch button
-							IGLoo.showWatchButton(sId);
+							// Add Device to Session
+							// Inside will set new sId and show watch button
+							now.serverAddDeviceToSession(cId, sId);
 
 							deviceInSession = true;
-						}else{
+							
+						} else {
 							commitDrag = false;
 						}
 					}
@@ -66,6 +65,8 @@ Ext.define('IGLoo.controller.DevicesController',{
 
 					// Device ended up not in a session box
 					if(!deviceInSession && commitDrag) {
+						
+						var prevSession = IGLoo.sId;
 						
 						// Remove device from its previous session
 						// request server to do the remove
@@ -78,14 +79,13 @@ Ext.define('IGLoo.controller.DevicesController',{
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 							}
 							else {
+								console.log('Commiting Removal');
+								
 								// Update Devices Offsets
 								now.serverSetDevicesOffset(null);
 								
 								//notify cId to hide watch button of sId
-								now.serverHideWatchButton(cId, IGLoo.sId);
-								
-								// Set session-id
-								now.clientSetSId(null);
+								now.serverHideWatchButton(cId, prevSession);
 							}
 						});
             			console.log("Device is not in a session: "+cId);
@@ -98,6 +98,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 					
 					var configpanel = Ext.getCmp('config-panel');
 					configpanel.setScrollable(true);
+					
 				}
         	}
         }
@@ -120,9 +121,3 @@ now.clientSetDeviceOffset = function(cId, index, sId) {
 	console.log('Device: '+cId+" offset to ("+x+', '+y+')');
 	Ext.getCmp(cId).getDraggable().setOffset(x,y);	
 };
-
-// Called from a Session Leader Client
-now.clientHideWatchButton = function(sId){
-	console.log('Request to remove watch button from Session: '+ sId);
-	IGLoo.hideWatchButton(sId);
-}

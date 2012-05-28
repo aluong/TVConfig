@@ -70,7 +70,8 @@ Ext.define('IGLoo.view.SessionPanel', {
 });
 
 // Show Watch Button
-IGLoo.showWatchButton = function(sId) {
+now.clientShowWatchButton = function(sId) {
+	console.log('Request to show watch button: '+sId);
 	if(sId != null) {
 		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
 		var watchButton = buttons[1];
@@ -79,11 +80,13 @@ IGLoo.showWatchButton = function(sId) {
 }
 
 // Hide Watch Button
-IGLoo.hideWatchButton = function(sId) {
+now.clientHideWatchButton = function(sId) {
+	console.log('Request to hide watch button: '+sId);
 	if(sId != null) {
 		var buttons = Ext.ComponentQuery.query('#'+sId+' button');
 		var watchButton = buttons[1];
-		watchButton.hide();
+		if(watchButton)
+			watchButton.hide();
 	}
 }
 

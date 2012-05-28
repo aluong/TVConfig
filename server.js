@@ -75,6 +75,9 @@ everyone.now.serverCreateSession = function(sId) {
 	// Update Server's Session Leader
 	sessions[sId] = this.user.clientId;
 	
+	// Set Client's sId
+	this.now.clientSetSId(sId);
+	
 	// Update all current user's sessions
 	everyone.now.clientAddSession(sId);
 	
@@ -154,7 +157,7 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	if(device['sId'] == sId) {
 		console.log(cId+" already in this session "+sId+", so device not added.");
 	}
-	else{
+	else {
 		// Update NowJS group
 		var sessionGroup = now.getGroup(sId);
 		sessionGroup.addUser(cId)
@@ -167,15 +170,21 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	
 		// Update Server's database
 		device['sId'] = sId;
+		
+		// Update sId on the client side
+		// Show the button
+		now.getClient(cId, function() {
+			this.now.clientSetSId(sId);
+			this.now.clientShowWatchButton(sId);
+		}); 
+		
+		// Reload Session-Details
+		everyone.now.reloadSessionDetails(sId);
+		
 		console.log('Client: '+cId+' added to Session: '+sId);
 	}
 	// Tell all Clients to move Device Icon into session
 	serverSetDevicesOffset(sId, everyone);
-	
-	// Reload Session-Details
-	everyone.now.reloadSessionDetails(sId);
-	
-	console.log('Client: '+cId+' added to Session: '+sId);
 }
 
 // Removes Device from a Session
@@ -219,7 +228,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	device['sId'] = null;
 	
 	// Update sId on the client side
-	this.now.clientSetSId(null); 
+	now.getClient(cId, function(){this.now.clientSetSId(null)}); 
 	
 	console.log('Client: '+cId+' removed from Session: '+sId);	
 	
