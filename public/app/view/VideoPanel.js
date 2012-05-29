@@ -17,15 +17,15 @@ Ext.define('IGLoo.view.VideoPanel', {
 		width:'80%',
 		height:'80%',
 		layout:'fit',
-/*
+
         items:[
 			{
 				xtype:'video',
-				url:'resources/videos/BigBuck.m4v',
+				url:'',
 				loop:true,
-				posterUrl:'resources/img/cover.png'
+				posterUrl:''
 			}
 		]
-*/
+
     }
 })

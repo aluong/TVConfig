@@ -9,12 +9,9 @@ Ext.define('IGLoo.controller.MediaListController', {
 				itemdoubletap:function(dv, index, item, e){
 					var url = dv.getStore().getAt(index).getData().url;
 					var cover = dv.getStore().getAt(index).getData().cover;
-					//set up the video panel
+
+					now.clientSetMediaContent(url, cover);
 					var videoPanel = Ext.getCmp('video-panel');
-					videoPanel.add(new Ext.Video({
-						url:url,
-						posterUrl:cover
-					}));
 					var sessionDetails = Ext.getCmp('session-details');
 					if(videoPanel.isHidden()){
 						videoPanel.show('pop');
@@ -29,3 +26,9 @@ Ext.define('IGLoo.controller.MediaListController', {
 		}
 	}
 });
+
+now.clientSetMediaContent = function(url, cover) {
+	var videoPanel = Ext.getCmp('video-panel');
+	videoPanel.getAt(0).setUrl(url);
+	videoPanel.getAt(0).setPosterUrl(cover);
+}

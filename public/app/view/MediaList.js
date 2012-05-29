@@ -9,8 +9,9 @@ Ext.define('IGLoo.view.MediaList', {
 		listeners: {
 	        itemtap: function (list, idx, target, record, evt) {
 	        	var sessionDetailsPanel = Ext.getCmp('session-details');
+	        	var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
 	        	// Only Allow Users the Session Leader to modify media content
-	        	if(sessionDetailsPanel.currentSession == IGLoo.sId) {
+	        	if(sessionDetailsPanel.currentSession == IGLoo.sId && (IGLoo.isLeader || IGLoo.cId == currentSelectedCId)) {
 					if(this.currentSelection == null) {
 		        		this.currentSelection = target;
 		        	}
@@ -21,7 +22,6 @@ Ext.define('IGLoo.view.MediaList', {
 		        	this.currentSelection = target;
 		        	
 		        	// Update Device on Server
-		        	var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
 		        	now.serverSetDeviceMedia(currentSelectedCId, record.get('url'));
 	        	}
 	        }
@@ -35,8 +35,15 @@ now.clientUpdateSelectedMedia = function(cId, url) {
 	var currentSession = Ext.getCmp('session-details-devices').currentSelection;
 	if(currentSession == null)
 		return;
+		
 	var currentSelectedCId= currentSession.getRecord().get('cId');
 	if(currentSelectedCId == cId) {
 		selectMedia(url);
 	}
+	
+	// Update Video Source and Cover for specific Client
+	if(cId == IGLoo.cId) {
+		now.clientSetMediaContent(url, Ext.data.StoreManager.lookup('MediaStore').findRecord('url', url).get('cover'));
+	}
+	
 }

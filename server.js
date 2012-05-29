@@ -229,7 +229,11 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	device['media'] = null;
 	
 	// Update sId on the client side
-	now.getClient(cId, function(){this.now.clientSetSId(null)}); 
+	// Update the client's media
+	now.getClient(cId, function() {
+		this.now.clientSetSId(null)
+		this.now.clientSetMediaContent('','');
+	}); 
 	
 	console.log('Client: '+cId+' removed from Session: '+sId);	
 	
