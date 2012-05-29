@@ -25,31 +25,38 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			sessionDetailsPanel.getAt(0).setHtml('<center>'+sessionDetailsPanel.currentSession+'<center>');
 
         			// Update the Devices List
-        			/*var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
-        			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
-					sessionDetailStore.load({
-						//call back after the store has been loaded
-						callback: function(records, operation, success){
-							var index = sessionDetailStore.findExact('cId', IGLoo.cId);
-							var model = sessionDetailStore.getAt(index);
-							var deleteButton = Ext.getCmp('delete-session-button');
-							if(index === -1 || model.getData().leader !== 1){
-								deleteButton.hide();
-							}
-							else{
-								deleteButton.show();
-							}
-						},
-						scope:this
-					});*/
         			now.reloadSessionDetails(sessionDetailsPanel.currentSession);
-
+					
+        			// Hide Click-Here if client not in session
+        			if(sessionDetailsPanel.currentSession != IGLoo.sId) {
+        				// Hide the button
+        				Ext.each(Ext.ComponentQuery.query('mediaitem'), 
+        					function(item) {
+	        					//item.getAt(0).hide();
+	        					item.getAt(0).setHtml('Selected <br>Indicator');
+	        				}
+        				);
+        				console.log('Hide all session-details click buttons');
+        			}
+        			else {
+    					// Show the click button button
+						Ext.each(Ext.ComponentQuery.query('mediaitem'), 
+							function(item) {
+								//item.getAt(0).show();
+								item.getAt(0).setHtml('<b>Click Here <br>To <br>Select Media</b>');
+							}
+						);
+						console.log('Show all session-details click buttons');
+					}
+        			
 					// lock config panel
 					Ext.getCmp('config-panel').setScrollable(false);
         		},
         		hide: function() {
         			// unlock config panel
 					Ext.getCmp('config-panel').setScrollable(true);
+					Ext.getCmp('session-details').currentSession = null;
+					Ext.data.StoreManager.lookup('DevicesStore').setOpenLoad(true);
         		}
         		
         	},
@@ -57,8 +64,6 @@ Ext.define('IGLoo.controller.ConfigureController',{
             	tap: function() {
             		var sessionDetailsPanel = Ext.getCmp('session-details');
             		console.log('Deleting Session: '+sessionDetailsPanel.currentSession);
-            		
-            		
             		now.serverDeleteSession(sessionDetailsPanel.currentSession);
             		sessionDetailsPanel.hide();
             	}
@@ -66,6 +71,42 @@ Ext.define('IGLoo.controller.ConfigureController',{
         }
     }
 });
+
+function selectDevice(cId, sId) {
+	var record = null;
+	Ext.each(Ext.ComponentQuery.query('devicesitem'), 
+		function(item) {
+			if(item.getRecord().get('cId') == cId && item.getRecord().get('sId') == sId) {
+				Ext.getCmp('session-details-devices').currentSelection = item;
+				item.setStyle('background-color:blue;');
+				record = item.getRecord();
+				console.log('Selected Device: '+cId);
+			}
+			else {
+				item.setStyle('background-color:white;');
+			}
+		}
+	);
+	return record;
+}
+
+function selectMedia(media) {
+	var record = null;
+	Ext.each(Ext.ComponentQuery.query('mediaitem'), 
+		function(item) {
+			if(item.getRecord().get('url') == media) {
+				Ext.getCmp('session-details-media').currentSelection = item;
+				item.setStyle('background-color:blue;');
+				record = item.getRecord();
+				console.log('Selected Media: '+media);
+			}
+			else {
+				item.setStyle('background-color:white;');
+			}
+		}
+	);
+	return record;
+}
 
 
 now.reloadSessionDetails = function(sId) {

@@ -88,6 +88,10 @@ Ext.define('IGLoo.controller.DevicesController',{
 								now.serverHideWatchButton(cId, prevSession);
 							}
 						});
+						
+						// Reset Session-Details Varaibles for Client
+						Ext.data.StoreManager.lookup('DevicesStore').setOpenLoad(true);
+						
             			console.log("Device is not in a session: "+cId);
 					}
 					

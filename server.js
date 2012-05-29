@@ -226,6 +226,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	
 	// Update Server's database on what session is the device in
 	device['sId'] = null;
+	device['media'] = null;
 	
 	// Update sId on the client side
 	now.getClient(cId, function(){this.now.clientSetSId(null)}); 
@@ -282,6 +283,21 @@ serverSetDevicesOffset = function(sId, target) {
 	}
 }
 
+everyone.now.serverSetDeviceMedia= function(cId, url) {
+	for(var i = 0; i < devices.length; i++){
+		if(devices[i]['cId'] == cId) {
+			devices[i]['media'] = url;
+			console.log(cId+' media set to '+url);
+			break;
+		}
+	}
+	
+	// Tell all users to reload session details
+	everyone.now.reloadSessionDetails(devices[i]['sId']);
+	
+	// Tell all users to update their media lists
+	everyone.now.clientUpdateSelectedMedia(devices[i]['cId'], url);
+}
 
 // Registers Device to Server
 // Call Path: 1 Client -> Server -> All Clients
@@ -289,7 +305,7 @@ everyone.now.serverAddDevice = function(name) {
 	console.log(name+" connected");
 	
 	// Update Server's devices lists
-	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'leader':0});
+	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'media':null,'leader':0});
 	
 	// Set the client's Id 
 	this.now.clientSetClientId(this.user.clientId);

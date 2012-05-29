@@ -26,7 +26,16 @@ Ext.define('IGLoo.view.MediaItem', {
 			align: 'center',
 			pack: 'center'
 			
-		}
+		},
+		items: [{
+			xtype: 'label',
+       		width: '150px',
+       		height: '150px',
+       		mode: 'element',
+       		html: '<b>Click Here <br>To <br>Select Media</b>',
+       		style: 'line-height:2em; text-align: center;',
+       		docked: 'right'
+       	}]
 		
     },
     applyCover: function(config) {

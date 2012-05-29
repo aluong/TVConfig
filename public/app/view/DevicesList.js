@@ -6,15 +6,23 @@ Ext.define('IGLoo.view.DevicesList', {
 		useComponents: true,
         defaultType: 'devicesitem',
 		store: 'DevicesStore',
+		currentSelection: null,
 		listeners: {
 	        itemtap: function (list, idx, target, record, evt) {
-				if(target.getStyle() == 'background-color:blue;') {
-					target.setStyle('background-color:white;');
-				}
-				else {
-	        		target.setStyle('background-color:blue;');
-				}
+				if(this.currentSelection == null) {
+	        		this.currentSelection = target;
+	        	}
+	        	else {
+	        		this.currentSelection.setStyle('background-color:white;');
+	        	}
+	        	target.setStyle('background-color:blue;');
+	        	this.currentSelection = target;
+	        	
+	        	// Set the media to be the client's current media
+	        	var media = Ext.data.StoreManager.lookup('DevicesStore').findRecord('cId', record.get('cId')).get('media');
+	        	selectMedia(media);
 	        }
+	        
 		}
 
 
