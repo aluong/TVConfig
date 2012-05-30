@@ -34,9 +34,6 @@ Ext.define('IGLoo.controller.ConfigureController',{
         					function(item) {
 	        					//item.getAt(0).hide();
 	        					item.getAt(0).setHtml('Selected <br>Indicator');
-								item.getAt(0).setListeners({
-									itemtap:function(){}
-									});
 								//hide all PLAY, STOP buttons
 								item.getAt(4).hide();
 	        				}
