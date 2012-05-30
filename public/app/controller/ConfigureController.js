@@ -27,13 +27,15 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			// Update the Devices List
         			now.reloadSessionDetails(sessionDetailsPanel.currentSession);
 					
-        			// Hide Click-Here if client not in session
-        			if(sessionDetailsPanel.currentSession != IGLoo.sId) {
+        			// Hide Click-Here if client not in session or it's not the leader
+        			if(sessionDetailsPanel.currentSession != IGLoo.sId || !IGLoo.isLeader) {
         				// Hide the button
         				Ext.each(Ext.ComponentQuery.query('mediaitem'), 
         					function(item) {
 	        					//item.getAt(0).hide();
 	        					item.getAt(0).setHtml('Selected <br>Indicator');
+								//hide all PLAY, STOP buttons
+								item.getAt(4).hide();
 	        				}
         				);
         				console.log('Hide all session-details click buttons');
