@@ -34,6 +34,7 @@ Ext.application({
 		IGLoo.tmpOffset = {}; // tmp offset used to record the location
 		IGLoo.isLeader = false;
 		IGLoo.sId = null;
+		IGLoo.url = '';
 				
 		Ext.Msg.prompt(
 			'Device Connected!',

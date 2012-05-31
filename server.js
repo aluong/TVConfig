@@ -47,6 +47,8 @@ server.get('/media', function(request, response) {
 					{'name': 'BigBuck-P2', 'url': '/resources/videos/BigBuck2.mp4', 'cover':'/resources/img/cover2.png'}
 					];
 		
+		
+		
 		response.send(JSON.stringify(media, null, 4), {"Content-Type": "application/json"});
 });
 
@@ -67,6 +69,39 @@ var devices = [];
 //var sessions = [];
 var sessions = {}; //Since the session-id is no longer a int here
 
+//clocks
+//one clock per video per session
+var clocks = {};
+
+everyone.now.serverPause = function(sId, url){
+	console.log('serverPause: '+sId+' '+url);
+	clocks[sId][url]['time'] = (new Date()).getTime()/1000 - clocks[sId][url]['startTime'];
+	clocks[sId][url]['state'] = 'pause';
+}
+
+everyone.now.serverPlay = function(sId,url){
+	console.log('serverPlay: '+sId+' '+url);
+	if(clocks[sId][url]['time'] == 0){
+		clocks[sId][url]['startTime'] = (new Date()).getTime()/1000;
+	}
+	clocks[sId][url]['state'] = 'play';
+}
+
+everyone.now.serverStop = function(sId, url){
+	console.log('serverStop: '+sId+' '+url);
+	clocks[sId][url]['time'] = 0.0;
+	clocks[sId][url]['state'] = 'stop';
+}
+
+everyone.now.serverGetClock = function(sId, cId, callback){
+	for(var i = 0; i < devices.length; i++){
+		if(devices[i]['cId'] == cId) {
+			callback(clocks[sId][devices[i]['media']]);
+			break;
+		}
+	}
+}
+
 // Creates a new Session
 // Call Path: 1 Client -> Server -> All clients
 everyone.now.serverCreateSession = function(sId) {
@@ -85,6 +120,18 @@ everyone.now.serverCreateSession = function(sId) {
 	// Call to a server method
 	this.now.serverAddDeviceToSession(this.user.clientId, sId);
 
+	//setup the CLOCK
+	clocks[sId] = {
+		'/resources/videos/BigBuck.m4v':{
+			time:0.0,
+			startTime:0.0,
+			state:'stop'
+			},
+		'/resources/videos/BigBuck2.mp4':{
+			time:0.0,
+			startTime:0.0,
+			state:'stop'}
+	};
 };
 
 // Deletes a session
@@ -116,6 +163,8 @@ everyone.now.serverDeleteSession = function(sId) {
 	
 	// Update Positioning of Devices
 	everyone.now.serverLoadSessions();
+	
+	clocks[sId] = null;
 }
 
 //notify client with this cId to hide the watch button of sId

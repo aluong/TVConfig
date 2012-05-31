@@ -87,10 +87,19 @@ Ext.define('IGLoo.view.MediaItem', {
 						listeners: {
 							tap: function() {
 								if(this.getIcon() == '/resources/icons/play.png') {
-									this.setIcon('/resources/icons/pause.png')
+									this.setIcon('/resources/icons/pause.png');
+									//pick up where last time stopped
+									var url = IGLoo.url;
+									var sessionDetailsPanel = Ext.getCmp('session-details');
+									var sId = sessionDetailsPanel.currentSession;
+									now.serverPlay(sId,url);
 								}
 								else {
-									this.setIcon('/resources/icons/play.png')
+									this.setIcon('/resources/icons/play.png');
+									var url = IGLoo.url;
+									var sessionDetailsPanel = Ext.getCmp('session-details');
+									var sId = sessionDetailsPanel.currentSession;
+									now.serverPause(sId,url);
 								}
 							}
 						}
@@ -110,7 +119,11 @@ Ext.define('IGLoo.view.MediaItem', {
 						icon: '/resources/icons/stop.png',
 						listeners: {
 						tap: function() {
-								this.getParent().getAt(0).setIcon('/resources/icons/play.png')
+								this.getParent().getAt(0).setIcon('/resources/icons/play.png');
+								var url = IGLoo.url;
+								var sessionDetailsPanel = Ext.getCmp('session-details');
+								var sId = sessionDetailsPanel.currentSession;
+								now.serverStop(sId,url);
 							}
 						}
 					}
@@ -119,3 +132,7 @@ Ext.define('IGLoo.view.MediaItem', {
 		]);
 	}
 });
+
+now.syncClock = function(clock){
+	IGLoo.clock = clock;
+}

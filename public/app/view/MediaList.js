@@ -25,6 +25,8 @@ Ext.define('IGLoo.view.MediaList', {
 		        	
 			        	// Update Device on Server
 			        	now.serverSetDeviceMedia(currentSelectedCId, record.get('url'));
+						IGLoo.url = record.get('url');
+						console.log('IGLoo.url='+IGLoo.url);
 		        	}
 				}	
 	        }
@@ -46,7 +48,8 @@ now.clientUpdateSelectedMedia = function(cId, url) {
 	
 	// Update Video Source and Cover for specific Client
 	if(cId == IGLoo.cId) {
+		IGLoo.url = url;
 		now.clientSetMediaContent(url, Ext.data.StoreManager.lookup('MediaStore').findRecord('url', url).get('cover'));
 	}
-	
+
 }
