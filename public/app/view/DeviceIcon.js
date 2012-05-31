@@ -2,7 +2,7 @@ Ext.define('IGLoo.view.DeviceIcon', {
     extend:'Ext.Panel',
     xtype:'deviceicon',
     initialize: function() {
-			this.callParent();
+			this.callParent(arguments);
 			// Push these events down from the element level of the DOM tree.
 			this.relayEvents(this.element, ['dragstart', 'drag', 'dragend']);
 	},
