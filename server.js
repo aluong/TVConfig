@@ -73,24 +73,39 @@ var sessions = {}; //Since the session-id is no longer a int here
 //one clock per video per session
 var clocks = {};
 
-everyone.now.serverPause = function(sId, url){
-	console.log('serverPause: '+sId+' '+url);
-	clocks[sId][url]['time'] = (new Date()).getTime()/1000 - clocks[sId][url]['startTime'];
+everyone.now.serverPause = function(sId, url, cId, time){
+	console.log('serverPause: '+sId+' '+url+' '+cId+' '+time);
+	clocks[sId][url]['time'] = time - clocks[sId][url]['startTime'];
 	clocks[sId][url]['state'] = 'pause';
+	
+	// Need to tell the client to pause
+	now.getClient(cId, function() {
+		this.now.clientPauseVideo();
+	});
 }
 
-everyone.now.serverPlay = function(sId,url){
-	console.log('serverPlay: '+sId+' '+url);
+everyone.now.serverPlay = function(sId, url, cId){
+	console.log('serverPlay: '+sId+' '+url+' '+cId);
 	if(clocks[sId][url]['time'] == 0){
 		clocks[sId][url]['startTime'] = (new Date()).getTime()/1000;
 	}
 	clocks[sId][url]['state'] = 'play';
+	
+	// Need to tell the client to play
+	now.getClient(cId, function() {
+		this.now.clientPlayVideo();
+	});
 }
 
-everyone.now.serverStop = function(sId, url){
-	console.log('serverStop: '+sId+' '+url);
+everyone.now.serverStop = function(sId, url, cId){
+	console.log('serverStop: '+sId+' '+url+' '+cId);
 	clocks[sId][url]['time'] = 0.0;
 	clocks[sId][url]['state'] = 'stop';
+	
+	// Need to tell the client to stop
+	now.getClient(cId, function() {
+		this.now.clientStopVideo();
+	});
 }
 
 everyone.now.serverGetClock = function(sId, cId, callback){

@@ -53,9 +53,11 @@ Ext.define('IGLoo.view.SessionPanel', {
 							var videoPanel = Ext.getCmp('video-panel');
 							if(videoPanel.isHidden()){
 								videoPanel.show('pop');
-								now.serverGetClock(IGLoo.sId, IGLoo.cId, function(clock){
-									console.log('serverGetClock:'+IGLoo.sId+' '+IGLoo.cId);
-									alert(clock.time+' '+clock.state);
+								now.serverGetClock(IGLoo.sId, IGLoo.url, function(clock){
+									console.log('serverGetClock: '+IGLoo.sId+' '+IGLoo.url+' set to '+clock.time);
+									
+									// Set the video to the current time
+									Ext.getCmp('video-media-content').setCurrentTime(clock.time);
 								});
 							}
 							else{

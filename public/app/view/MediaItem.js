@@ -90,16 +90,24 @@ Ext.define('IGLoo.view.MediaItem', {
 									this.setIcon('/resources/icons/pause.png');
 									//pick up where last time stopped
 									var url = IGLoo.url;
-									var sessionDetailsPanel = Ext.getCmp('session-details');
-									var sId = sessionDetailsPanel.currentSession;
-									now.serverPlay(sId,url);
+									var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
+									// Ignore Commands to self
+									if(currentSelectedCId == IGLoo.cId)
+										return;
+									var sId = Ext.getCmp('session-details').currentSession;
+									now.serverPlay(sId, url, currentSelectedCId);
+									console.log('Request for '+currentSelectedCId+' to Play');
 								}
 								else {
 									this.setIcon('/resources/icons/play.png');
 									var url = IGLoo.url;
-									var sessionDetailsPanel = Ext.getCmp('session-details');
-									var sId = sessionDetailsPanel.currentSession;
-									now.serverPause(sId,url);
+									var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
+									// Ignore Commands to self
+									if(currentSelectedCId == IGLoo.cId)
+										return;
+									var sId = Ext.getCmp('session-details').currentSession;
+									now.serverPause(sId, url, currentSelectedCId, Ext.getCmp('video-media-content').getCurrentTime());
+									console.log('Request for '+currentSelectedCId+' to Pause');
 								}
 							}
 						}
@@ -121,9 +129,14 @@ Ext.define('IGLoo.view.MediaItem', {
 						tap: function() {
 								this.getParent().getAt(0).setIcon('/resources/icons/play.png');
 								var url = IGLoo.url;
-								var sessionDetailsPanel = Ext.getCmp('session-details');
-								var sId = sessionDetailsPanel.currentSession;
-								now.serverStop(sId,url);
+								var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
+								// Ignore Commands to self
+								if(currentSelectedCId == IGLoo.cId)
+									return;
+								var sId = Ext.getCmp('session-details').currentSession;
+								now.serverStop(sId, url, currentSelectedCId);
+								console.log('Request for '+currentSelectedCId+' to Stop');
+								
 							}
 						}
 					}

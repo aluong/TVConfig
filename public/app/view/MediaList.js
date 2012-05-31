@@ -32,21 +32,3 @@ Ext.define('IGLoo.view.MediaList', {
 	}
 	
 });
-
-now.clientUpdateSelectedMedia = function(cId, url) {
-	var currentSession = Ext.getCmp('session-details-devices').currentSelection;
-	if(currentSession == null)
-		return;
-		
-	var currentSelectedCId= currentSession.getRecord().get('cId');
-	if(currentSelectedCId == cId) {
-		selectMedia(url);
-	}
-	
-	// Update Video Source and Cover for specific Client
-	if(cId == IGLoo.cId) {
-		IGLoo.url = url;
-		now.clientSetMediaContent(url, Ext.data.StoreManager.lookup('MediaStore').findRecord('url', url).get('cover'));
-	}
-
-}
