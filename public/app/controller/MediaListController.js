@@ -28,7 +28,13 @@ Ext.define('IGLoo.controller.MediaListController', {
 });
 
 now.clientSetMediaContent = function(url, cover) {
-	var videoPanel = Ext.getCmp('video-panel');
-	videoPanel.getAt(0).setUrl(url);
-	videoPanel.getAt(0).setPosterUrl(cover);
+	var video = Ext.getCmp('video-media-content');
+	if(url == null && url == null) {
+		video.setUrl();
+		video.setPosterUrl('');
+	}
+	else {
+		video.setUrl(url);
+		video.setPosterUrl(cover);
+	}
 }

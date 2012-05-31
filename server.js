@@ -164,6 +164,7 @@ everyone.now.serverDeleteSession = function(sId) {
 	// Update Positioning of Devices
 	everyone.now.serverLoadSessions();
 	
+	// Clear out the clocks
 	clocks[sId] = null;
 }
 
@@ -281,7 +282,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	// Update the client's media
 	now.getClient(cId, function() {
 		this.now.clientSetSId(null)
-		this.now.clientSetMediaContent('','');
+		this.now.clientSetMediaContent(null,null);
 	}); 
 	
 	console.log('Client: '+cId+' removed from Session: '+sId);	
