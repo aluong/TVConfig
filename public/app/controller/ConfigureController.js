@@ -25,7 +25,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			sessionDetailsPanel.getAt(0).setHtml('<center>'+sessionDetailsPanel.currentSession+'<center>');
 
         			// Update the Devices List
-        			now.reloadSessionDetailsDeviceList(sessionDetailsPanel.currentSession);
+        			now.clientReloadSessionDetailsDeviceList(sessionDetailsPanel.currentSession);
 					
         			// Hide Click-Here if client not in session or it's not the leader
         			if(sessionDetailsPanel.currentSession != IGLoo.sId || !IGLoo.isLeader) {

@@ -53,13 +53,13 @@ Ext.application({
 					IGLoo.name = name;
 					now.name = name;
 					
-					// Add Device to Server
-					now.serverAddDevice(name);
-					
 					// Load Devices and Sessions
-					// Initial Delay 1 second
-					Ext.defer(now.serverLoadDevices,200);
-					Ext.defer(now.serverLoadSessions,200);
+					now.serverLoadDevices();
+					now.serverLoadSessions();
+					
+					// Add Device to Server
+					// Delay .2 seconds
+					Ext.defer(now.serverAddDevice, 200, this, [name]);
 					
 				});
 			},
@@ -213,6 +213,7 @@ nowJSfunctionDefinitions = function() {
 			var watchButton = buttons[1];
 			if(typeof(watchButton) != 'undefined')
 				watchButton.hide();
+		}
 	}
 	
 	// ----------------------------------------- //		
@@ -220,7 +221,7 @@ nowJSfunctionDefinitions = function() {
 	// ----------------------------------------- //	
 	
 	// Reload the Session Details Devices
-	now.reloadSessionDetailsDeviceList = function(sId) {
+	now.clientReloadSessionDetailsDeviceList = function(sId) {
 		var sessionDetailsPanel = Ext.getCmp('session-details');
 		var sessionDetailStore = Ext.StoreMgr.lookup('DevicesStore');
 		if(sId == sessionDetailsPanel.currentSession) {
@@ -344,6 +345,5 @@ nowJSfunctionDefinitions = function() {
 		}
 	};
 
-}
 };
 					

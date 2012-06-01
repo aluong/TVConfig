@@ -255,7 +255,7 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 		}); 
 		
 		// Reload Session-Details
-		everyone.now.reloadSessionDetailsDeviceList(sId);
+		everyone.now.clientReloadSessionDetailsDeviceList(sId);
 		
 		console.log('Client: '+cId+' added to Session: '+sId);
 	}
@@ -329,7 +329,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		}
 		
 		// Reload Session-Details
-		everyone.now.reloadSessionDetailsDeviceList(sId);
+		everyone.now.clientReloadSessionDetailsDeviceList(sId);
 		
 		// Reload Session, missing a device
 		serverSetDevicesOffset(sId, everyone);
@@ -354,8 +354,9 @@ everyone.now.serverSetDevicesOffset = function(sId, target) {
 }
 
 // Helper Function
+// sId == Null : device List
 serverSetDevicesOffset = function(sId, target) {
-	console.log('Setting offset for:'+sId);
+	console.log('Setting offset for session: '+sId);
 	var k = 0;
 	for(var i = 0; i < devices.length; i++){
 		if(devices[i]['sId'] == sId) {
@@ -378,6 +379,8 @@ everyone.now.serverAddDevice = function(name) {
 	// Update all current user's devices
 	everyone.now.clientAddDevice(name, this.user.clientId);
 	
+	// Update Devices Offsets
+	serverSetDevicesOffset(null, everyone);	
 };
 
 // Loads all the devices for a client
@@ -385,11 +388,11 @@ everyone.now.serverLoadDevices = function() {
 	// Load all current devices for the new client
 	for(var i = 0; i < devices.length; i++) {
 		console.log("Load device: "+devices[i]['name']);
-		this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
+		// Don't Add Itself
+		if(this.user.clientId != devices[i]['cId']) {
+			this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
+		}
 	}
-	
-	// Update Devices Offsets
-	serverSetDevicesOffset(null, this);
 }
 
 // -------------------------------------------------------- //
@@ -420,7 +423,7 @@ everyone.now.serverSetDeviceMedia= function(cId, url) {
 	}
 	
 	// Tell all users to reload session details
-	everyone.now.reloadSessionDetailsDeviceList(devices[i]['sId']);
+	everyone.now.clientReloadSessionDetailsDeviceList(devices[i]['sId']);
 	
 	// Tell all users to update their media lists
 	everyone.now.clientUpdateSelectedMedia(devices[i]['cId'], url);

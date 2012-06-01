@@ -13,7 +13,7 @@ Ext.define('IGLoo.store.DevicesStore', {
 		listeners: {
 			load: function() {
 				if(this.getOpenLoad()) {
-					console.log('Loading Defaults...');
+					console.log('Loading Devices Defaults...');
 					// Default Select the current Device
 					var cId =  Ext.getCmp('session-details').currentSession == IGLoo.sId ? IGLoo.cId : null; 
 					var record = now.clientSelectDevice(cId, Ext.getCmp('session-details').currentSession);

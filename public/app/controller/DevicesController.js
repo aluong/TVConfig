@@ -14,6 +14,8 @@ Ext.define('IGLoo.controller.DevicesController',{
 					IGLoo.tmpOffset.x = icon.getDraggable().offset.x;
 					IGLoo.tmpOffset.y = icon.getDraggable().offset.y;
 				},
+				// When a device is in a session panel, the panel's border is changed
+				// to indiciate selection
 				drag:function(e) {
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
@@ -35,32 +37,34 @@ Ext.define('IGLoo.controller.DevicesController',{
 					// Determine what session is the device located
 					var deviceInSession = false;
 					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
-					
-
 					Ext.each(sessionpanels, function(session) {
-					var sessionRegion = Ext.util.Region.getRegion(session.getId());
-					var sId = session.getId();
+						var sessionRegion = Ext.util.Region.getRegion(session.getId());
+						var sId = session.getId();
 					
-					// Found a session with the device
-					if(!sessionRegion.isOutOfBound(dragPoint)) {
-						
-						// Moving itself
-						if(cId == IGLoo.cId){
-							console.log('Moving Itself to new Session');
-							// Hide old watch button
-							now.clientHideWatchButton(IGLoo.sId);
+						// Found a session with the device
+						if(!sessionRegion.isOutOfBound(dragPoint)) {
 							
-							// Add Device to Session
-							// Inside will set new sId and show watch button
-							now.serverAddDeviceToSession(cId, sId);
-
-							deviceInSession = true;
-							
-						} else {
-							commitDrag = false;
+							// Moving itself
+							if(cId == IGLoo.cId){
+								console.log('Moving Itself to new Session');
+								
+								// Hide old watch button if device is moved
+								if(IGLoo.sId != sId) {
+									now.clientHideWatchButton(IGLoo.sId);
+								}
+								
+								// Add Device to Session
+								// Inside will set new sId and show watch button
+								now.serverAddDeviceToSession(cId, sId);
+	
+								deviceInSession = true;
+								
+							} else {
+								commitDrag = false;
+							}
 						}
-					}
-					session.setStyle('border: 1px solid #acacac;');
+						session.setStyle('border: 1px solid #acacac;');
+						
 					});
 
 					// Device ended up not in a session box
