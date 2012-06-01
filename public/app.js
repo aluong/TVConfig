@@ -233,18 +233,29 @@ nowJSfunctionDefinitions = function() {
 		if(sId == sessionDetailsPanel.currentSession) {
 			console.log('Reloading Session Device List: '+sId);
 			sessionDetailDevicesStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
+			
+			var currentDeviceSelected = null;
+			if(Ext.getCmp('session-details-devices').currentSelection != null)
+				currentDeviceSelected = Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
+			
 			sessionDetailDevicesStore.load({
 				//call back after the store has been loaded
 				callback: function(records, operation, success){
-					var index = sessionDetailDevicesStore.findExact('cId', IGLoo.cId);
-					var model = sessionDetailDevicesStore.getAt(index);
-					var deleteButton = Ext.getCmp('delete-session-button');
-					if(index === -1 || model.getData().leader !== 1){
-						deleteButton.hide();
+					
+					// Reselect the Device since store reloaded
+					if(currentDeviceSelected != null) {
+						var record = now.clientSelectDevice(currentDeviceSelected, sessionDetailsPanel.currentSession);
+						
+						// Can't find device, because session changes
+						if( record == null ) {
+							console.log('Previous selected device cannot be found so loading defaults');
+							now.clientSetDefaultDevice();
+						}
+						else {
+							console.log('Previous selected device loaded');
+						}
 					}
-					else{
-						deleteButton.show();
-					}
+					
 				},
 				scope:this
 			});
@@ -260,6 +271,18 @@ nowJSfunctionDefinitions = function() {
 			sessionDetailMediaStore.load();
 		}
 	};
+	
+	// Set default device and select it's media
+	now.clientSetDefaultDevice = function() {
+		console.log('Loading Default Device');
+		// Default Select the current Device
+		var cId =  Ext.getCmp('session-details').currentSession == IGLoo.sId ? IGLoo.cId : null; 
+		var record = now.clientSelectDevice(cId, Ext.getCmp('session-details').currentSession);
+		var media = record == null ? null : record.get('media');
+		
+		// Select the current media item (implied from above we are the session)
+		now.clientSelectMedia(media);
+	}
 	
 	// Selects the Device in the Session Details
 	now.clientSelectDevice = function(cId, sId) {

@@ -13,18 +13,22 @@ Ext.define('IGLoo.store.DevicesStore', {
 		listeners: {
 			load: function() {
 				if(this.getOpenLoad()) {
-					console.log('Loading Devices Defaults...');
-					// Default Select the current Device
-					var cId =  Ext.getCmp('session-details').currentSession == IGLoo.sId ? IGLoo.cId : null; 
-					var record = now.clientSelectDevice(cId, Ext.getCmp('session-details').currentSession);
-					var media = record == null ? null : record.get('media');
+					// Load Default Device
+					now.clientSetDefaultDevice();
 					
-					// Select the current media item (implied from above we are the session)
-					now.clientSelectMedia(media);
-
 					// First Load completed
 					this.setOpenLoad(false)
 				}
+				
+				// Hide/Show delete button
+				var model = this.findRecord('cId', IGLoo.cId);
+				var deleteButton = Ext.getCmp('delete-session-button');
+				if(model == null || model.getData().leader != 1){
+					deleteButton.hide();
+				}
+				else{
+					deleteButton.show();
+				}	
 			}
 		}
 		
