@@ -32,7 +32,6 @@ Ext.define('IGLoo.controller.ConfigureController',{
         				// Hide the button
         				Ext.each(Ext.ComponentQuery.query('mediaitem'), 
         					function(item) {
-	        					//item.getAt(0).hide();
 	        					item.getAt(0).setHtml('Selected <br>Indicator');
 								//hide all PLAY, STOP buttons
 								item.getAt(4).hide();
@@ -44,8 +43,9 @@ Ext.define('IGLoo.controller.ConfigureController',{
     					// Show the click button button
 						Ext.each(Ext.ComponentQuery.query('mediaitem'), 
 							function(item) {
-								//item.getAt(0).show();
 								item.getAt(0).setHtml('<b>Click Here <br>To <br>Select Media</b>');
+								//show all PLAY, STOP buttons
+								item.getAt(4).show();
 							}
 						);
 						console.log('Show all session-details click buttons');

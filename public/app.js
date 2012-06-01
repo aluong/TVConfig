@@ -94,6 +94,12 @@ nowJSfunctionDefinitions = function() {
 		console.log('Set sId to: '+IGLoo.sId);
 	};
 	
+	// Set the leader
+	now.clientSetIsLeader = function(val) {
+		IGLoo.isLeader = val;
+		console.log('Set isLeader to: '+val);
+	}
+	
 	// --------------------------------- //
 	// ----------- DEVICES ------------- //
 	// --------------------------------- //	
@@ -220,18 +226,18 @@ nowJSfunctionDefinitions = function() {
 	// ----------- SESSION-DETAILS ------------- //
 	// ----------------------------------------- //	
 	
-	// Reload the Session Details Devices
+	// Reload the Session Details Devices List
 	now.clientReloadSessionDetailsDeviceList = function(sId) {
 		var sessionDetailsPanel = Ext.getCmp('session-details');
-		var sessionDetailStore = Ext.StoreMgr.lookup('DevicesStore');
+		var sessionDetailDevicesStore = Ext.StoreMgr.lookup('DevicesStore');
 		if(sId == sessionDetailsPanel.currentSession) {
-			console.log('Reloading Session Details: '+sId);
-			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
-			sessionDetailStore.load({
+			console.log('Reloading Session Device List: '+sId);
+			sessionDetailDevicesStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
+			sessionDetailDevicesStore.load({
 				//call back after the store has been loaded
 				callback: function(records, operation, success){
-					var index = sessionDetailStore.findExact('cId', IGLoo.cId);
-					var model = sessionDetailStore.getAt(index);
+					var index = sessionDetailDevicesStore.findExact('cId', IGLoo.cId);
+					var model = sessionDetailDevicesStore.getAt(index);
 					var deleteButton = Ext.getCmp('delete-session-button');
 					if(index === -1 || model.getData().leader !== 1){
 						deleteButton.hide();
@@ -242,6 +248,16 @@ nowJSfunctionDefinitions = function() {
 				},
 				scope:this
 			});
+		}
+	};
+	
+	// Reload the Session Details Media List
+	now.clientReloadSessionDetailsMediaList = function(sId) {
+		var sessionDetailsPanel = Ext.getCmp('session-details');
+		var sessionDetailMediaStore = Ext.StoreMgr.lookup('MediaStore');
+		if(sId == sessionDetailsPanel.currentSession) {
+			console.log('Reloading Session Media List: '+sId);
+			sessionDetailMediaStore.load();
 		}
 	};
 	

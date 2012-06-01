@@ -48,6 +48,9 @@ Ext.define('IGLoo.controller.DevicesController',{
 						// Add Device to Session
 						// Inside will set new sId and show watch button
 						now.serverAddDeviceToSession(cId, deviceSession);
+						
+						// Can't be leader
+						IGLoo.isLeader = false;
 					}
 					// Device ended up not in a session box
 					else if(deviceSession == null) {
@@ -72,6 +75,9 @@ Ext.define('IGLoo.controller.DevicesController',{
 								
 								//notify cId to hide watch button of sId
 								now.serverHideWatchButton(cId, prevSession);
+								
+								// Can't be leader
+								IGLoo.isLeader = false;
 							}
 						});
 						

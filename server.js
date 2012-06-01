@@ -325,6 +325,11 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 			now.getGroup(sId).getUsers(function (usersList) { 
 				sessions[sId] = usersList[0];
 				console.log('New Session Leader for '+sId+' is '+cId);
+				
+				// Set the leader
+				now.getClient(sessions[sId], function() {
+					this.now.clientSetIsLeader(true);
+				});
 			});
 		}
 		
@@ -403,7 +408,7 @@ everyone.now.serverLoadDevices = function() {
 everyone.now.serverHideWatchButton = function(cId, sId){
 	console.log('Hiding '+cId+' watch video button for session '+sId);
 	now.getClient(cId, function() {
-				this.now.clientHideWatchButton(sId);
+			this.now.clientHideWatchButton(sId);
 	});
 }
 
