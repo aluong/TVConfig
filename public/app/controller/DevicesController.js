@@ -7,6 +7,7 @@ Ext.define('IGLoo.controller.DevicesController',{
         },
         control: {
         	device: {
+        		// Sets the device icons initial location
 	            dragstart:function(e){
 					var configpanel = Ext.getCmp('config-panel');
 					configpanel.setScrollable(false);
@@ -27,48 +28,29 @@ Ext.define('IGLoo.controller.DevicesController',{
 							session.setStyle('border: 1px solid #acacac;');
 					});
 				},
+				// Handles the final destination of a device
+				// The device will snap to particular locations depending on destination
 				dragend:function(e){
 					// Grab Device
 					var cId = e.getTarget().id;
-					var commitDrag = true;
-					
 					var dragPoint = Ext.util.Point.fromEvent(e);
 					
 					// Determine what session is the device located
-					var deviceInSession = false;
-					var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
-					Ext.each(sessionpanels, function(session) {
-						var sessionRegion = Ext.util.Region.getRegion(session.getId());
-						var sId = session.getId();
-					
-						// Found a session with the device
-						if(!sessionRegion.isOutOfBound(dragPoint)) {
-							
-							// Moving itself
-							if(cId == IGLoo.cId){
-								console.log('Moving Itself to new Session');
-								
-								// Hide old watch button if device is moved
-								if(IGLoo.sId != sId) {
-									now.clientHideWatchButton(IGLoo.sId);
-								}
-								
-								// Add Device to Session
-								// Inside will set new sId and show watch button
-								now.serverAddDeviceToSession(cId, sId);
-	
-								deviceInSession = true;
-								
-							} else {
-								commitDrag = false;
-							}
-						}
-						session.setStyle('border: 1px solid #acacac;');
-						
-					});
+					var deviceSession = this.checkDeviceInSession(dragPoint);
 
+					// Only the client can move it's device icon to a session
+					// Only move the device icon if the session is different
+					if(deviceSession != null && deviceSession != IGLoo.sId && cId == IGLoo.cId) {
+						
+						// Hide old watch button if device is moved to a new session
+						now.clientHideWatchButton(IGLoo.sId);
+						
+						// Add Device to Session
+						// Inside will set new sId and show watch button
+						now.serverAddDeviceToSession(cId, deviceSession);
+					}
 					// Device ended up not in a session box
-					if(!deviceInSession && commitDrag) {
+					else if(deviceSession == null) {
 						
 						var prevSession = IGLoo.sId;
 						
@@ -98,10 +80,11 @@ Ext.define('IGLoo.controller.DevicesController',{
 						
             			console.log("Device is not in a session: "+cId);
 					}
-					
-					if(!commitDrag){
+					// Revert the move
+					else {
 						var icon = Ext.getCmp(cId);
-						icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);	
+						icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
+						console.log('Device moved back to last position');
 					}
 					
 					var configpanel = Ext.getCmp('config-panel');
@@ -110,5 +93,26 @@ Ext.define('IGLoo.controller.DevicesController',{
 				}
         	}
         }
+    },
+    checkDeviceInSession: function(dragPoint) {
+    	var sessionpanels = Ext.ComponentQuery.query('.sessionPanel');
+    	var inside = null;
+		Ext.each(sessionpanels, function(session) {
+			var sessionRegion = Ext.util.Region.getRegion(session.getId());
+			
+			// Reset the border
+			session.setStyle('border: 1px solid #acacac;');
+		
+			// Check if device is in the session
+			if(!sessionRegion.isOutOfBound(dragPoint)) {
+				console.log('Client moved itself to new session');
+				inside = session.getId();
+	
+				// Break out
+				return false;
+			}
+		});
+		
+		return inside;
     }
 });
