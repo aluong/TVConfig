@@ -19,7 +19,7 @@ Ext.define('IGLoo.view.DevicesList', {
 	        	this.currentSelection = target;
 	        	
 	        	// Set the media to be the client's current media
-	        	var media = Ext.data.StoreManager.lookup('DevicesStore').findRecord('cId', record.get('cId')).get('media');
+	        	var media = Ext.StoreMgr.lookup('DevicesStore').findRecord('cId', record.get('cId')).get('media');
 	        	now.clientSelectMedia(media);
 	        }   
 		}

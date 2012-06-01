@@ -79,7 +79,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 								icon.getDraggable().setOffset(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 							}
 							else {
-								console.log('Commiting Removal');
+								console.log('Commiting Device Removal');
 								
 								// Update Devices Offsets
 								now.serverSetDevicesOffset(null);
@@ -90,7 +90,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 						});
 						
 						// Reset Session-Details Varaibles for Client
-						Ext.data.StoreManager.lookup('DevicesStore').setOpenLoad(true);
+						Ext.StoreMgr.lookup('DevicesStore').setOpenLoad(true);
 						
             			console.log("Device is not in a session: "+cId);
 					}

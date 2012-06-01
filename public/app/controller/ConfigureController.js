@@ -25,7 +25,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			sessionDetailsPanel.getAt(0).setHtml('<center>'+sessionDetailsPanel.currentSession+'<center>');
 
         			// Update the Devices List
-        			now.reloadSessionDetails(sessionDetailsPanel.currentSession);
+        			now.reloadSessionDetailsDeviceList(sessionDetailsPanel.currentSession);
 					
         			// Hide Click-Here if client not in session or it's not the leader
         			if(sessionDetailsPanel.currentSession != IGLoo.sId || !IGLoo.isLeader) {
@@ -58,7 +58,7 @@ Ext.define('IGLoo.controller.ConfigureController',{
         			// unlock config panel
 					Ext.getCmp('config-panel').setScrollable(true);
 					Ext.getCmp('session-details').currentSession = null;
-					Ext.data.StoreManager.lookup('DevicesStore').setOpenLoad(true);
+					Ext.StoreMgr.lookup('DevicesStore').setOpenLoad(true);
         		}
         		
         	},

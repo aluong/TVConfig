@@ -22,7 +22,7 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					now.clientHideWatchButton(IGLoo.sId);
 					
 					// Reset Session-Details Varaibles for Client
-					Ext.data.StoreManager.lookup('DevicesStore').setOpenLoad(true);
+					Ext.StoreMgr.lookup('DevicesStore').setOpenLoad(true);
 
 					Ext.getCmp('add-session-panel').hide();	
         		}

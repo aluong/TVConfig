@@ -255,7 +255,7 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 		}); 
 		
 		// Reload Session-Details
-		everyone.now.reloadSessionDetails(sId);
+		everyone.now.reloadSessionDetailsDeviceList(sId);
 		
 		console.log('Client: '+cId+' added to Session: '+sId);
 	}
@@ -329,7 +329,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		}
 		
 		// Reload Session-Details
-		everyone.now.reloadSessionDetails(sId);
+		everyone.now.reloadSessionDetailsDeviceList(sId);
 		
 		// Reload Session, missing a device
 		serverSetDevicesOffset(sId, everyone);
@@ -420,7 +420,7 @@ everyone.now.serverSetDeviceMedia= function(cId, url) {
 	}
 	
 	// Tell all users to reload session details
-	everyone.now.reloadSessionDetails(devices[i]['sId']);
+	everyone.now.reloadSessionDetailsDeviceList(devices[i]['sId']);
 	
 	// Tell all users to update their media lists
 	everyone.now.clientUpdateSelectedMedia(devices[i]['cId'], url);

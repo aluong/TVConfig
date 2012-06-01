@@ -6,6 +6,7 @@ Ext.define('IGLoo.controller.MediaListController', {
 		},
 		control: {
 			mediaList: {
+				// USED MAINLY FOR TESTING AT THE MOMENT
 				itemdoubletap:function(dv, index, item, e){
 					var url = dv.getStore().getAt(index).getData().url;
 					var cover = dv.getStore().getAt(index).getData().cover;

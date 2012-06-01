@@ -123,7 +123,6 @@ nowJSfunctionDefinitions = function() {
 		else {
 			console.log("Device Exists: "+cId);
 		}
-
 	};
 	
 	// Remove Device
@@ -170,14 +169,10 @@ nowJSfunctionDefinitions = function() {
 			console.log("Session Created: "+sId);
 		}
 		IGLoo.sessions[sId] = true;
-		//Hide the control buttons if it's not the session that this device is currently in
+		
+		//Hide the control buttons if it's not clients's current session
 		if(sId !== IGLoo.sId){
-			//query the watch button
-			//please change it if you know a better method 
-			//Hide watch button at session panel
-			var buttons = Ext.ComponentQuery.query('#'+sId+' button');
-			var watchButton = buttons[1];
-			watchButton.hide();
+			now.clientHideWatchButton(sId);
 		}
 	};
 	
@@ -225,9 +220,9 @@ nowJSfunctionDefinitions = function() {
 	// ----------------------------------------- //	
 	
 	// Reload the Session Details Devices
-	now.reloadSessionDetails = function(sId) {
+	now.reloadSessionDetailsDeviceList = function(sId) {
 		var sessionDetailsPanel = Ext.getCmp('session-details');
-		var sessionDetailStore = Ext.getCmp('session-details-devices').getStore();
+		var sessionDetailStore = Ext.StoreMgr.lookup('DevicesStore');
 		if(sId == sessionDetailsPanel.currentSession) {
 			console.log('Reloading Session Details: '+sId);
 			sessionDetailStore.getProxy().setUrl('/sessionDevices?sId='+sessionDetailsPanel.currentSession);
