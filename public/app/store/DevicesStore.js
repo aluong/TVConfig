@@ -16,10 +16,11 @@ Ext.define('IGLoo.store.DevicesStore', {
 					console.log('Loading Defaults...');
 					// Default Select the current Device
 					var cId =  Ext.getCmp('session-details').currentSession == IGLoo.sId ? IGLoo.cId : null; 
-					var record = selectDevice(cId, Ext.getCmp('session-details').currentSession);
+					var record = now.clientSelectDevice(cId, Ext.getCmp('session-details').currentSession);
 					var media = record == null ? null : record.get('media');
+					
 					// Select the current media item (implied from above we are the session)
-					selectMedia(media);
+					now.clientSelectMedia(media);
 
 					// First Load completed
 					this.setOpenLoad(false)

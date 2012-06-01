@@ -1,4 +1,7 @@
-// Setting Up Server
+// ---------------------------------------- //
+// ----------- SERVER MODULES ------------- //
+// ---------------------------------------- //
+
 var exec = require('child_process').exec,
     now = require('now'),
     fs = require('fs'),
@@ -6,7 +9,17 @@ var exec = require('child_process').exec,
     querystring = require('querystring'),
     express = require('express');
 
+    
+// -------------------------------------- //
+// ----------- SERVER SETUP ------------- //
+// -------------------------------------- //
+    
 var server = express.createServer();
+
+
+// --------------------------------------- //
+// ----------- SERVER ROUTES ------------- //
+// --------------------------------------- //
 
 // Returns a list of devices tied to a session
 // Ex: /sessionDevices?sId=sessionName
@@ -55,8 +68,14 @@ server.get('/media', function(request, response) {
 // General Static Files
 server.use(express.static(__dirname + '/public'));
 
+// Ports
 server.listen(1111);
 console.log('Server Listening on Port: ' + 1111);
+
+
+// ------------------------------------------ //
+// ----------- SERVER VARIABLES ------------- //
+// ------------------------------------------ //
 
 // Setting up NowJS
 var everyone = now.initialize(server);
@@ -72,6 +91,10 @@ var sessions = {}; //Since the session-id is no longer a int here
 //clocks
 //one clock per video per session
 var clocks = {};
+
+// ----------------------------------------------- //
+// ----------- VIDEO NOWJS FUNCTIONS ------------- //
+// ----------------------------------------------- //
 
 everyone.now.serverPause = function(sId, url, cId, time){
 	console.log('serverPause: '+sId+' '+url+' '+cId+' '+time);
@@ -117,8 +140,12 @@ everyone.now.serverGetClock = function(sId, cId, callback){
 	}
 }
 
+
+// ------------------------------------------------- //
+// ----------- SESSION NOWJS FUNCTIONS ------------- //
+// ------------------------------------------------- //
+
 // Creates a new Session
-// Call Path: 1 Client -> Server -> All clients
 everyone.now.serverCreateSession = function(sId) {
 	console.log('Session: ' + sId + ' Created.');
 	
@@ -150,13 +177,9 @@ everyone.now.serverCreateSession = function(sId) {
 };
 
 // Deletes a session
-// Call Path: 1 Client -> Server -> All Clients
 // Removes all Devices from server
-// Call Path: 1 Client -> Server
 // Moves all Devices out
-// Call Path: Server -> All Clients
 // Reload all Sessions, since icons moved
-// Call Path: Server -> All Clients
 everyone.now.serverDeleteSession = function(sId) {
 	console.log('Session: ' + sId + ' Deleted.');
 	// Update Server's sessions lists
@@ -183,17 +206,7 @@ everyone.now.serverDeleteSession = function(sId) {
 	clocks[sId] = null;
 }
 
-//notify client with this cId to hide the watch button of sId
-everyone.now.serverHideWatchButton = function(cId, sId){
-	console.log('Hiding '+cId+' watch video button for session '+sId);
-	now.getClient(cId, function() {
-				this.now.clientHideWatchButton(sId);
-			});
-}
-
-
 // Loads all the session for a client
-// Call Path: 1 Client -> Server -> 1 Client
 everyone.now.serverLoadSessions = function() {
 	var targetClient = this;
 	
@@ -213,9 +226,7 @@ everyone.now.serverLoadSessions = function() {
 
 // Adds Device to Server's Session
 // Requests a removal of device from old session
-// Call Path: 1 Client -> Server -> 1 Clients
 // Tells all clients to move the device icon to the session
-// Call Path: 1 Client -> Server -> All Clients
 everyone.now.serverAddDeviceToSession = function(cId, sId) {
 	var device = devices.findDevice(cId);
 	// Ignore adding to the same session
@@ -254,7 +265,6 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 
 // Removes Device from a Session
 // If the session becomes empty, delete it
-// Call Path: 1 Client -> Server -> 1 Clients
 // Updates Session Leader on the server if needed
 // abortedCB is a callback with param which indicates aborted or not
 everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedCB, sId) {
@@ -330,8 +340,11 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	}
 }
 
+// ------------------------------------------------ //
+// ----------- DEVICE NOWJS FUNCTIONS ------------- //
+// ------------------------------------------------ //
+
 // Called from one client to move a devices to (x,y) for all devices 
-// Call Path: 1 Client -> Server -> All Clients
 // sId == Null : device List
 everyone.now.serverSetDevicesOffset = function(sId, target) {
 	if(target == null) {
@@ -352,6 +365,51 @@ serverSetDevicesOffset = function(sId, target) {
 	}
 }
 
+// Registers Device to Server
+everyone.now.serverAddDevice = function(name) {
+	console.log(name+" connected");
+	
+	// Update Server's devices lists
+	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'media':null,'leader':0});
+	
+	// Set the client's Id 
+	this.now.clientSetClientId(this.user.clientId);
+	
+	// Update all current user's devices
+	everyone.now.clientAddDevice(name, this.user.clientId);
+	
+};
+
+// Loads all the devices for a client
+everyone.now.serverLoadDevices = function() {
+	// Load all current devices for the new client
+	for(var i = 0; i < devices.length; i++) {
+		console.log("Load device: "+devices[i]['name']);
+		this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
+	}
+	
+	// Update Devices Offsets
+	serverSetDevicesOffset(null, this);
+}
+
+// -------------------------------------------------------- //
+// ----------- SESSION-PANELS NOWJS FUNCTIONS ------------- //
+// -------------------------------------------------------- //
+
+//notify client with this cId to hide the watch button of sId
+everyone.now.serverHideWatchButton = function(cId, sId){
+	console.log('Hiding '+cId+' watch video button for session '+sId);
+	now.getClient(cId, function() {
+				this.now.clientHideWatchButton(sId);
+	});
+}
+
+
+// --------------------------------------------------------- //
+// ----------- SESSION-DETAILS NOWJS FUNCTIONS ------------- //
+// --------------------------------------------------------- //
+
+// Sets the Media Device for a Client
 everyone.now.serverSetDeviceMedia= function(cId, url) {
 	for(var i = 0; i < devices.length; i++){
 		if(devices[i]['cId'] == cId) {
@@ -368,40 +426,13 @@ everyone.now.serverSetDeviceMedia= function(cId, url) {
 	everyone.now.clientUpdateSelectedMedia(devices[i]['cId'], url);
 }
 
-// Registers Device to Server
-// Call Path: 1 Client -> Server -> All Clients
-everyone.now.serverAddDevice = function(name) {
-	console.log(name+" connected");
-	
-	// Update Server's devices lists
-	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'media':null,'leader':0});
-	
-	// Set the client's Id 
-	this.now.clientSetClientId(this.user.clientId);
-	
-	// Update all current user's devices
-	everyone.now.clientAddDevice(name, this.user.clientId);
-	
-};
-
-// Loads all the devices for a client
-// Call Path: 1 Client -> Server -> 1 Client 
-everyone.now.serverLoadDevices = function() {
-	// Load all current devices for the new client
-	for(var i = 0; i < devices.length; i++) {
-		console.log("Load device: "+devices[i]['name']);
-		this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
-	}
-	
-	// Update Devices Offsets
-	serverSetDevicesOffset(null, this);
-}
+// ------------------------------------------------- //
+// ----------- CLEANUP NOWJS FUNCTIONS ------------- //
+// ------------------------------------------------- //
 
 // Client Disconnected
 // Remove the Device Icon from all Clients
-// Call Path: 1 Client -> Server -> All Clients
 // Remove Device from Session (NEED TO BE FIXED, currently all clients are calling this)
-// Call Path: 1 Client -> Server -> All Clients
 // Reset Variables if no client is connected.
 everyone.disconnected(function() {
 	console.log(this.now.dId+" disconnected.")
@@ -424,7 +455,10 @@ everyone.disconnected(function() {
 	
 }); 
 
-// Array Prototypes
+// ------------------------------------------ //
+// ----------- ARRAY PROTOTYPES ------------- //
+// ------------------------------------------ //
+
 Array.prototype.findDevice = function(cId) {
   var device = false;
   for (var i=0; i<this.length; i++) {

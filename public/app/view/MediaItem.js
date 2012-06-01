@@ -145,7 +145,3 @@ Ext.define('IGLoo.view.MediaItem', {
 		]);
 	}
 });
-
-now.syncClock = function(clock){
-	IGLoo.clock = clock;
-}

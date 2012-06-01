@@ -34,21 +34,5 @@ Ext.define('IGLoo.view.VideoPanel', {
 				}
 			}
 		]
-
     }
-})
-
-now.clientPlayVideo = function() {
-	// Hide the Poster
-	Ext.getCmp('video-media-content').ghost.hide()
-	Ext.getCmp('video-media-content').play();
-}
-
-now.clientPauseVideo = function() {
-	Ext.getCmp('video-media-content').pause();
-}
-
-now.clientStopVideo = function() {
-	Ext.getCmp('video-media-content').stop();
-}
-
+});
