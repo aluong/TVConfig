@@ -323,6 +323,14 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 				// Set the leader
 				now.getClient(sessions[sId], function() {
 					this.now.clientSetIsLeader(true);
+					
+					// Pass control button state to new leader
+					var states = [];
+					for(var media in clocks[sId]) {
+						states.push(clocks[sId][media]['state']);
+					}
+					this.now.clientMediaControlState(states);
+					
 				});
 			});
 		}

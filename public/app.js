@@ -407,6 +407,24 @@ nowJSfunctionDefinitions = function() {
 			console.log('Media Content set to '+url);
 		}
 	};
+	
+	// Set Media Control State
+	now.clientMediaControlState = function(states) {
+		console.log('Setting Control State');
+		for(var i = 0; i < states.length; i++) {
+			var control = Ext.getCmp('session-details-media').getAt(0).getAt(i).getAt(4).getAt(0);
+			console.log(i+' state: '+states[i]);
+			// If we are playing, we want to see pause
+			if(states[i] == 'play' ) {
+				control.setIcon('/resources/icons/pause.png');
+			}
+			else {
+				control.setIcon('/resources/icons/play.png');
+			}
+		}
+
+		debugger
+	};
 
 };
 					
