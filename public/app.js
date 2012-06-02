@@ -100,6 +100,12 @@ nowJSfunctionDefinitions = function() {
 		console.log('Set isLeader to: '+val);
 	}
 	
+	// Set the url
+	now.clientSetUrl = function(url) {
+		IGLoo.url = url;
+		console.log('Set url to: '+url);
+	}
+	
 	// --------------------------------- //
 	// ----------- DEVICES ------------- //
 	// --------------------------------- //	
@@ -350,23 +356,41 @@ nowJSfunctionDefinitions = function() {
 	};
 	
 	// Play the Video
-	now.clientPlayVideo = function() {
-		// Hide the Poster
-		Ext.getCmp('video-media-content').ghost.hide()
-		Ext.getCmp('video-media-content').play();
-		console.log('Playing Video');
+	now.clientPlayVideo = function(sId, url) {
+		if(sId == IGLoo.sId && url == IGLoo.url && !IGLoo.isLeader) {
+			Ext.Msg.confirm("Confirmation", "Session leader has started video, should we switch to the video?", function(value) {
+					// If confirmed 
+					if( value == 'yes') {
+						// Hide Session Panel
+						Ext.getCmp('session-details').hide();
+						
+						// Show Video panel
+						Ext.getCmp('video-panel').show();
+						
+						// Need to fire ghost's tap event to properly hide the poster
+						// and start the video
+						Ext.getCmp('video-media-content').ghost.fireEvent('tap');
+						
+						console.log('Playing Video');
+					}
+			});
+		}
 	};
 	
 	// Pause the Video
-	now.clientPauseVideo = function() {
-		Ext.getCmp('video-media-content').pause();
-		console.log('Pausing Video');
+	now.clientPauseVideo = function(sId, url) {
+		if(sId == IGLoo.sId && url == IGLoo.url && !IGLoo.isLeader) {
+			Ext.getCmp('video-media-content').pause();
+			console.log('Pausing Video');
+		}
 	};
 	
 	// Stop the Video
-	now.clientStopVideo = function() {
-		Ext.getCmp('video-media-content').stop();
-		console.log('Stopping Video');
+	now.clientStopVideo = function(sId, url) {
+		if(sId == IGLoo.sId && url == IGLoo.url && !IGLoo.isLeader) {
+			Ext.getCmp('video-media-content').stop();
+			console.log('Stopping Video');
+		}
 	};
 	
 	// Sets the Media Content being watched 

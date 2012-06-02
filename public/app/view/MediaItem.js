@@ -69,6 +69,8 @@ Ext.define('IGLoo.view.MediaItem', {
 	
 	updateRecord: function(record) {
 		this.callParent(arguments);
+		
+		// This control panel is only accessible by the session leader
 		this.add([
 			{
 				xtype:'container',
@@ -85,30 +87,35 @@ Ext.define('IGLoo.view.MediaItem', {
 						padding: 0,
 						icon: '/resources/icons/play.png',
 						listeners: {
-							tap: function() {
+							tap: function(button, event) {
+								// Play Pressed
 								if(this.getIcon() == '/resources/icons/play.png') {
+									// Send request to server to tell all clients 
+									// in this session to play this video
+									var url = button.getParent().getParent().getRecord().get('url')
+									var sId = Ext.getCmp('session-details').currentSession;
+									now.serverPlay(sId, url);
+									console.log('Request for to Play: '+url);
+									
+									// Change icons
 									this.setIcon('/resources/icons/pause.png');
-									//pick up where last time stopped
-									var url = IGLoo.url;
-									var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
-									// Ignore Commands to self
-									if(currentSelectedCId == IGLoo.cId)
-										return;
-									var sId = Ext.getCmp('session-details').currentSession;
-									now.serverPlay(sId, url, currentSelectedCId);
-									console.log('Request for '+currentSelectedCId+' to Play');
 								}
+								// Pause Pressed
 								else {
-									this.setIcon('/resources/icons/play.png');
-									var url = IGLoo.url;
-									var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
-									// Ignore Commands to self
-									if(currentSelectedCId == IGLoo.cId)
-										return;
+									// Send request to server to tell all clients 
+									// in this session to pause this video
+									var url = button.getParent().getParent().getRecord().get('url')
 									var sId = Ext.getCmp('session-details').currentSession;
-									now.serverPause(sId, url, currentSelectedCId, Ext.getCmp('video-media-content').getCurrentTime());
-									console.log('Request for '+currentSelectedCId+' to Pause');
+									var time = Ext.getCmp('video-media-content').getCurrentTime();
+									now.serverPause(sId, url, time);
+									console.log('Request for to Pause: '+url);
+									
+									// Change icons
+									this.setIcon('/resources/icons/play.png');
 								}
+								
+								// Stop Propagation of event
+								event.stopPropagation();
 							}
 						}
 						
@@ -126,17 +133,19 @@ Ext.define('IGLoo.view.MediaItem', {
 						cls: 'stop-icon',
 						icon: '/resources/icons/stop.png',
 						listeners: {
-						tap: function() {
-								this.getParent().getAt(0).setIcon('/resources/icons/play.png');
-								var url = IGLoo.url;
-								var currentSelectedCId= Ext.getCmp('session-details-devices').currentSelection.getRecord().get('cId');
-								// Ignore Commands to self
-								if(currentSelectedCId == IGLoo.cId)
-									return;
+						tap: function(button, event) {
+								// Send request to server to tell all clients 
+								// in this session to stop this video
+								var url = button.getParent().getParent().getRecord().get('url')
 								var sId = Ext.getCmp('session-details').currentSession;
-								now.serverStop(sId, url, currentSelectedCId);
-								console.log('Request for '+currentSelectedCId+' to Stop');
+								now.serverStop(sId, url);
+								console.log('Request to Stop: '+url);
 								
+								// Reset Play Icon
+								this.getParent().getAt(0).setIcon('/resources/icons/play.png');
+								
+								// Stop Propagation of event
+								event.stopPropagation();
 							}
 						}
 					}

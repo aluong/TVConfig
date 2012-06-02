@@ -96,39 +96,30 @@ var clocks = {};
 // ----------- VIDEO NOWJS FUNCTIONS ------------- //
 // ----------------------------------------------- //
 
-everyone.now.serverPause = function(sId, url, cId, time){
-	console.log('serverPause: '+sId+' '+url+' '+cId+' '+time);
-	clocks[sId][url]['time'] = time - clocks[sId][url]['startTime'];
+everyone.now.serverPause = function(sId, url, time){
+	console.log('serverPause: '+sId+' '+url+' '+time);
+	clocks[sId][url]['time'] = time;
 	clocks[sId][url]['state'] = 'pause';
 	
-	// Need to tell the client to pause
-	now.getClient(cId, function() {
-		this.now.clientPauseVideo();
-	});
+	// Need to tell all clients to pause
+	everyone.now.clientPauseVideo(sId, url);
 }
 
-everyone.now.serverPlay = function(sId, url, cId){
-	console.log('serverPlay: '+sId+' '+url+' '+cId);
-	if(clocks[sId][url]['time'] == 0){
-		clocks[sId][url]['startTime'] = (new Date()).getTime()/1000;
-	}
+everyone.now.serverPlay = function(sId, url) {
+	console.log('serverPlay: '+sId+' '+url);
 	clocks[sId][url]['state'] = 'play';
 	
-	// Need to tell the client to play
-	now.getClient(cId, function() {
-		this.now.clientPlayVideo();
-	});
+	// Need to tell all clients to play
+	everyone.now.clientPlayVideo(sId, url);
 }
 
-everyone.now.serverStop = function(sId, url, cId){
-	console.log('serverStop: '+sId+' '+url+' '+cId);
+everyone.now.serverStop = function(sId, url){
+	console.log('serverStop: '+sId+' '+url+' ');
 	clocks[sId][url]['time'] = 0.0;
 	clocks[sId][url]['state'] = 'stop';
 	
-	// Need to tell the client to stop
-	now.getClient(cId, function() {
-		this.now.clientStopVideo();
-	});
+	// Need to tell all clients to stop
+	everyone.now.clientStopVideo(sId, url);
 }
 
 everyone.now.serverGetClock = function(sId, cId, callback){
@@ -163,6 +154,9 @@ everyone.now.serverCreateSession = function(sId) {
 	this.now.serverAddDeviceToSession(this.user.clientId, sId);
 
 	//setup the CLOCK
+	// ------------------------------------------------- //
+	// THIS IS HARD-CODED WE NEED TO FIX
+	// ------------------------------------------------- //
 	clocks[sId] = {
 		'/resources/videos/BigBuck.m4v':{
 			time:0.0,
@@ -426,6 +420,11 @@ everyone.now.serverSetDeviceMedia= function(cId, url) {
 			break;
 		}
 	}
+	
+	// Set the specific client's url
+	now.getClient(cId, function() {
+		this.now.clientSetUrl(url);
+	});
 	
 	// Tell all users to reload session details
 	everyone.now.clientReloadSessionDetailsDeviceList(devices[i]['sId']);
