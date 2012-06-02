@@ -23,13 +23,16 @@ Ext.define('IGLoo.view.VideoPanel', {
 				loop:true,
 				posterUrl:'',
 				id: 'video-media-content',
-				//enableControls: false,
+				enableControls: false,
 				listeners: {
 					pause: function(video, time) {
 						
 					},
 					play: function(video) {
 						
+					},
+					initialize: function() {
+						this.ghost.un('tap', this.onGhostTap);
 					}
 				}
 			}

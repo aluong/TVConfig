@@ -50,7 +50,9 @@ Ext.define('IGLoo.controller.DevicesController',{
 						now.serverAddDeviceToSession(cId, deviceSession);
 						
 						// Can't be leader
-						IGLoo.isLeader = false;
+						now.clientSetIsLeader(false);
+						now.clientSetSessionLeaderVideoControls(false);
+						
 					}
 					// Device ended up not in a session box
 					else if(deviceSession == null) {
@@ -77,7 +79,8 @@ Ext.define('IGLoo.controller.DevicesController',{
 								now.serverHideWatchButton(cId, prevSession);
 								
 								// Can't be leader
-								IGLoo.isLeader = false;
+								now.clientSetIsLeader(false);
+								now.clientSetSessionLeaderVideoControls(false);
 							}
 						});
 						

@@ -369,7 +369,8 @@ nowJSfunctionDefinitions = function() {
 						
 						// Need to fire ghost's tap event to properly hide the poster
 						// and start the video
-						Ext.getCmp('video-media-content').ghost.fireEvent('tap');
+						//Ext.getCmp('video-media-content').ghost.fireEvent('tap');
+						Ext.getCmp('video-media-content').onGhostTap();
 						
 						console.log('Playing Video');
 					}
@@ -422,9 +423,19 @@ nowJSfunctionDefinitions = function() {
 				control.setIcon('/resources/icons/play.png');
 			}
 		}
-
-		debugger
 	};
-
+	
+	// Session Leader controls 
+	now.clientSetSessionLeaderVideoControls = function(leader) {
+		var mediaContent = Ext.getCmp('video-media-content');
+		if(leader) {
+			mediaContent.ghost.on('tap', mediaContent.onGhostTap);
+			mediaContent.setEnableControls(true)
+		}
+		else {
+			mediaContent.ghost.un('tap', mediaContent.onGhostTap);
+			mediaContent.setEnableControls(false)
+		}	
+	}
 };
 					
