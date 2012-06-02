@@ -52,6 +52,7 @@ Ext.define('IGLoo.controller.DevicesController',{
 						// Can't be leader
 						now.clientSetIsLeader(false);
 						now.clientSetSessionLeaderVideoControls(false);
+						now.clientSetUrl(null);
 						
 					}
 					// Device ended up not in a session box
@@ -71,16 +72,6 @@ Ext.define('IGLoo.controller.DevicesController',{
 							}
 							else {
 								console.log('Commiting Device Removal');
-								
-								// Update Devices Offsets
-								now.serverSetDevicesOffset(null);
-								
-								//notify cId to hide watch button of sId
-								now.serverHideWatchButton(cId, prevSession);
-								
-								// Can't be leader
-								now.clientSetIsLeader(false);
-								now.clientSetSessionLeaderVideoControls(false);
 							}
 						});
 						

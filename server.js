@@ -279,15 +279,16 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		sId = device['sId'];
 	}
 	
+	// Check if the move is valid
 	if(!(operatorCID == cId || (device['sId'] == opDevice['sId'] && sessions[sId] == operatorCID ))){
 		//should abort
-		console.log('cancle REMOVE');
+		console.log('Cancel REMOVE of '+cId);
 		if(abortedCB){
 			abortedCB(true);
 		}
 		return;
 	}
-	console.log('Commit REMOVE');
+	console.log('Commit REMOVE of'+cId);
 	
 	// Update NowJS group
 	var sessionGroup = now.getGroup(sId);
@@ -297,11 +298,14 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 	device['sId'] = null;
 	device['media'] = null;
 	
-	// Update sId on the client side
-	// Update the client's media
+	// Update sId, url, media, leader, video DOM controls, watch button for this client
 	now.getClient(cId, function() {
+		this.now.clientSetUrl(null);
 		this.now.clientSetSId(null)
 		this.now.clientSetMediaContent(null,null);
+		this.now.clientSetIsLeader(false);
+		this.now.clientSetSessionLeaderVideoControls(false);
+		this.now.clientHideWatchButton(sId);
 	}); 
 	
 	console.log('Client: '+cId+' removed from Session: '+sId);	
@@ -340,7 +344,9 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		everyone.now.clientReloadSessionDetailsDeviceList(sId);
 		
 		// Reload Session, missing a device
+		// Reload Devices, added a device
 		serverSetDevicesOffset(sId, everyone);
+		serverSetDevicesOffset(null, everyone);
 	  }
 	});	
 	if(abortedCB){
