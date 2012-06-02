@@ -23,6 +23,14 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					
 					// Reset Session-Details Varaibles for Client
 					Ext.StoreMgr.lookup('DevicesStore').setOpenLoad(true);
+					
+					// Reset all of the Media Control Buttons
+					// Selects the Media in the Session Details
+					Ext.each(Ext.ComponentQuery.query('mediaitem'), 
+						function(item) {
+							item.getAt(4).getAt(0).setIcon('/resources/icons/play.png');
+						}
+					);
 
 					Ext.getCmp('add-session-panel').hide();	
         		}
