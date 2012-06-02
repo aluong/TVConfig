@@ -445,9 +445,10 @@ everyone.disconnected(function() {
 	console.log(this.now.dId+" disconnected.")
 	
 	if(typeof(everyone.now.clientRemoveDevice) != "undefined") {
-		everyone.now.clientRemoveDevice(this.user.clientId);
 		everyone.now.serverRemoveDeviceFromSession(this.user.clientId,this.user.clientId, null, null);
+		everyone.now.clientRemoveDevice(this.user.clientId);
 		devices.removeDevice(this.user.clientId);
+		serverSetDevicesOffset(null, everyone);
 		console.log(this.user.clientId+" removed from server.")
 	}
 	
