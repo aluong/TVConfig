@@ -42,12 +42,10 @@ Ext.define('IGLoo.view.SessionDetails', {
 				items: [
 					{
 						xtype: 'devicesList',
-						id: 'session-details-devices',
 						flex: 1
 					},
 					{
 						xtype: 'mediaList',
-						id: 'session-details-media',
 						flex: 1
 					}
 				]

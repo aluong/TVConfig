@@ -3,6 +3,7 @@ Ext.define('IGLoo.view.DevicesList', {
 	alias: 'widget.devicesList',
 	requires: ['IGLoo.view.DevicesItem'],
 	config: {
+		id: 'session-details-devices',
 		useComponents: true,
         defaultType: 'devicesitem',
 		store: 'DevicesStore',

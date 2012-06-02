@@ -2,6 +2,7 @@ Ext.define('IGLoo.view.MediaList', {
 	extend: 'Ext.DataView',
 	xtype: 'mediaList',
 	config: {
+		id: 'session-details-media',
 		useComponents: true,
         defaultType: 'mediaitem',
 		store: 'MediaStore',
@@ -23,8 +24,6 @@ Ext.define('IGLoo.view.MediaList', {
 	        	
 		        	// Update Device on Server
 		        	now.serverSetDeviceMedia(currentSelectedCId, record.get('url'));
-					IGLoo.url = record.get('url');
-					console.log('IGLoo.url='+IGLoo.url);
 	        	}
 	        }
 	        
