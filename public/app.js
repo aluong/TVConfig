@@ -60,7 +60,7 @@ Ext.application({
 					// Add Device to Server
 					// Delay .2 seconds
 					Ext.defer(now.serverAddDevice, 200, this, [name]);
-					
+										
 				});
 			},
 			this,
@@ -429,12 +429,14 @@ nowJSfunctionDefinitions = function() {
 	now.clientSetSessionLeaderVideoControls = function(leader) {
 		var mediaContent = Ext.getCmp('video-media-content');
 		if(leader) {
-			mediaContent.ghost.on('tap', mediaContent.onGhostTap);
+			mediaContent.ghost.on('tap', mediaContent.onGhostTap, mediaContent);
 			mediaContent.setEnableControls(true)
+			console.log('Enable Leader Controls');
 		}
 		else {
-			mediaContent.ghost.un('tap', mediaContent.onGhostTap);
+			mediaContent.ghost.un('tap', mediaContent.onGhostTap, mediaContent);
 			mediaContent.setEnableControls(false)
+			console.log('Disable Leader Controls');
 		}	
 	}
 };

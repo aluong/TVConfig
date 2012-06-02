@@ -4,7 +4,7 @@ Ext.define('IGLoo.view.VideoPanel', {
 //	alias: 'widget.videopanel',
 
 	requires:[
-		'Ext.Video'
+		'IGLoo.view.MediaContent'
 	],
     config:{
 		id:'video-panel',
@@ -18,23 +18,7 @@ Ext.define('IGLoo.view.VideoPanel', {
 		layout:'fit',
         items:[
 			{
-				xtype:'video',
-				url:'',
-				loop:true,
-				posterUrl:'',
-				id: 'video-media-content',
-				enableControls: false,
-				listeners: {
-					pause: function(video, time) {
-						
-					},
-					play: function(video) {
-						
-					},
-					initialize: function() {
-						this.ghost.un('tap', this.onGhostTap);
-					}
-				}
+				xtype: 'mediacontent'
 			}
 		]
     }

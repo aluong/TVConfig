@@ -15,11 +15,6 @@ Ext.define('IGLoo.controller.AddSessionController',{
 					now.serverCreateSession(sId);
 					IGLoo.sessions.nextId += 1;
 					
-					// Set isLeader
-					now.clientSetIsLeader(true);
-					now.clientSetSessionLeaderVideoControls(true);
-					now.clientSetUrl(null);
-					
 					// Hide old Session Watch
 					now.clientHideWatchButton(IGLoo.sId);
 					

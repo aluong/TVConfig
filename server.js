@@ -143,9 +143,6 @@ everyone.now.serverCreateSession = function(sId) {
 	// Update Server's Session Leader
 	sessions[sId] = this.user.clientId;
 	
-	// Set Client's sId
-	this.now.clientSetSId(sId);
-	
 	// Update all current user's sessions
 	everyone.now.clientAddSession(sId);
 	
@@ -168,6 +165,12 @@ everyone.now.serverCreateSession = function(sId) {
 			startTime:0.0,
 			state:'stop'}
 	};
+	
+	// Set Client's sId, isLeader, Session-Leader Controls, Url
+	this.now.clientSetSId(sId);
+	this.now.clientSetIsLeader(true);
+	this.now.clientSetSessionLeaderVideoControls(true);
+	this.now.clientSetUrl(null);
 };
 
 // Deletes a session
@@ -347,6 +350,7 @@ everyone.now.serverRemoveDeviceFromSession = function(operatorCID, cId, abortedC
 		// Reload Devices, added a device
 		serverSetDevicesOffset(sId, everyone);
 		serverSetDevicesOffset(null, everyone);
+
 	  }
 	});	
 	if(abortedCB){

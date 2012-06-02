@@ -50,18 +50,23 @@ Ext.define('IGLoo.view.SessionPanel', {
 							'float:right;'
 						].join(''),
 						handler: function(){
-							var videoPanel = Ext.getCmp('video-panel');
-							if(videoPanel.isHidden()){
-								videoPanel.show('pop');
-								now.serverGetClock(IGLoo.sId, IGLoo.url, function(clock){
-									console.log('serverGetClock: '+IGLoo.sId+' '+IGLoo.url+' set to '+clock.time);
-									
-									// Set the video to the current time
-									Ext.getCmp('video-media-content').setCurrentTime(clock.time);
-								});
+							if(IGLoo.url == null) {
+								Ext.Msg.alert('', 'Select Media From the Session Details First');
 							}
-							else{
-								videoPanel.hide();
+							else {
+								var videoPanel = Ext.getCmp('video-panel');
+								if(videoPanel.isHidden()){
+									videoPanel.show('pop');
+									now.serverGetClock(IGLoo.sId, IGLoo.url, function(clock){
+										console.log('serverGetClock: '+IGLoo.sId+' '+IGLoo.url+' set to '+clock.time);
+										
+										// Set the video to the current time
+										Ext.getCmp('video-media-content').setCurrentTime(clock.time);
+									});
+								}
+								else{
+									videoPanel.hide();
+								}
 							}
 						}
 				    },
