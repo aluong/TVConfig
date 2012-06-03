@@ -248,7 +248,10 @@ everyone.now.serverAddDeviceToSession = function(cId, sId) {
 		// Show the button
 		now.getClient(cId, function() {
 			this.now.clientSetSId(sId);
-			this.now.clientShowWatchButton(sId);
+			this.now.clientShowWatchButton(sId)
+			this.now.clientSetIsLeader(false);
+			this.now.clientSetSessionLeaderVideoControls(false);
+			this.now.clientSetUrl(null);;
 		}); 
 		
 		// Reload Session-Details
@@ -389,13 +392,13 @@ everyone.now.serverAddDevice = function(name) {
 	console.log(name+" connected");
 	
 	// Update Server's devices lists
-	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'media':null,'leader':0});
+	devices.push({'name':name, 'cId':this.user.clientId, 'sId':null, 'media':null, 'leader':0, 'isPublic':0});
 	
 	// Set the client's Id 
 	this.now.clientSetClientId(this.user.clientId);
 	
 	// Update all current user's devices
-	everyone.now.clientAddDevice(name, this.user.clientId);
+	everyone.now.clientAddDevice(name, this.user.clientId, 0);
 	
 	// Update Devices Offsets
 	serverSetDevicesOffset(null, everyone);	
@@ -405,12 +408,20 @@ everyone.now.serverAddDevice = function(name) {
 everyone.now.serverLoadDevices = function() {
 	// Load all current devices for the new client
 	for(var i = 0; i < devices.length; i++) {
-		console.log("Load device: "+devices[i]['name']);
+		console.log("Load device: "+devices[i]['name']+' '+devices[i]['isPublic']);
 		// Don't Add Itself
 		if(this.user.clientId != devices[i]['cId']) {
-			this.now.clientAddDevice(devices[i]['name'], devices[i]['cId']);
+			this.now.clientAddDevice(devices[i]['name'], devices[i]['cId'], devices[i]['isPublic']);
 		}
 	}
+}
+
+// Set public statud of device
+everyone.now.serverSetPublicStatus = function(cId, isPublic) {
+	var device = devices.findDevice(cId);
+	device['isPublic'] = isPublic;
+	everyone.now.clientSetPublicStatus(cId, isPublic);
+	console.log('Public status of '+cId+' set to '+isPublic);
 }
 
 // -------------------------------------------------------- //

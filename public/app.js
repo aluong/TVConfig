@@ -111,23 +111,26 @@ nowJSfunctionDefinitions = function() {
 	// --------------------------------- //	
 	
 	// Adds device to device list and creates new item
-	now.clientAddDevice = function(deviceName, cId) {
+	now.clientAddDevice = function(deviceName, cId, isPublic) {
 		if(!IGLoo.devices[cId]) {							
-			var configPanel = Ext.getCmp('config-panel');		
-			configPanel.add( {
-				xclass: 'IGLoo.view.DeviceIcon',
+			var configPanel = Ext.getCmp('config-panel');
+			var device = Ext.create('IGLoo.view.DeviceIcon', {
 				name: deviceName,
-				id: cId,
-				items: [
-					{
-						html:[
-							"<img src='resources/img/ipad-icon.jpg'/>",
-							"<p>",deviceName,"</p>"
-						].join(''),
-						zindex:1
-					}
-				]
+				id: cId
 			});
+			
+			device.getAt(1).setHtml('<b>'+deviceName+'</b>');
+			
+			// Hide Private/Public if Client's device
+			if( IGLoo.cId == cId) {
+				device.getAt(3).enable();
+				device.getAt(3).show();
+			}
+			
+			// Set device's public status
+			now.clientSetPublicStatus(cId, isPublic);
+			
+			configPanel.add(device);
 			IGLoo.devices[cId] = true
 			console.log("Device Added: "+cId);
 
@@ -166,6 +169,22 @@ nowJSfunctionDefinitions = function() {
 		console.log('Device: '+cId+" offset to ("+x+', '+y+')');
 		Ext.getCmp(cId).getDraggable().setOffset(x,y);	
 	};
+	
+	// Set Public Status of Device
+	now.clientSetPublicStatus = function(cId, isPublic) {
+		var device = Ext.getCmp(cId).getAt(3);
+		if (isPublic == 0) {
+			device.getParent().setIsPublic(0);
+			device.getParent().getAt(2).setHtml('<b>Public<b>');
+			device.getParent().getAt(2).setStyle("color: green");
+			console.log(cId+' is Public Toggled');
+		} else {
+			device.getParent().setIsPublic(1);
+			device.getParent().getAt(2).setHtml('<b>Private<b>');
+			device.getParent().getAt(2).setStyle("color: red");
+			console.log(cId+' is Private Toggled');
+		}
+	}
 	
 	// --------------------------------- //
 	// ----------- SESSION ------------- //

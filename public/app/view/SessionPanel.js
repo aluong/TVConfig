@@ -4,7 +4,7 @@ Ext.define('IGLoo.view.SessionPanel', {
 	config: {
 		layout: 'auto',
 		cls:'sessionpanel',
-		height:'200px',
+		height:'225px',
 		style:[
 			'border:1px solid #acacac;',
 			'border-radius:25px;',

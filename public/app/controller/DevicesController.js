@@ -34,35 +34,35 @@ Ext.define('IGLoo.controller.DevicesController',{
 					// Grab Device
 					var cId = e.getTarget().id;
 					var dragPoint = Ext.util.Point.fromEvent(e);
+					var startPoint = new Ext.util.Point(IGLoo.tmpOffset.x, IGLoo.tmpOffset.y);
 					
 					// Determine what session is the device located
 					var deviceSession = this.checkDeviceInSession(dragPoint);
 
-					// Only the client can move it's device icon to a session
-					// Only move the device icon if the session is different
-					if(deviceSession != null && deviceSession != IGLoo.sId && cId == IGLoo.cId) {
-						
-						// Hide old watch button if device is moved to a new session
-						now.clientHideWatchButton(IGLoo.sId);
+					// Only the client can move it's device icon to a session unless...
+					if(deviceSession != null 
+							&& ( cId == IGLoo.cId || 									
+									(Ext.getCmp(cId).getIsPublic() == 0 				// device is public not in a session and you are the leader
+									&& IGLoo.isLeader 
+									&& this.checkDeviceInSession(startPoint) == null)) 
+							&& (this.checkDeviceInSession(startPoint) != deviceSession) // Ignore moving inside a session
+												 ) {
 						
 						// Add Device to Session
 						// Inside will set new sId and show watch button
 						now.serverAddDeviceToSession(cId, deviceSession);
 						
-						// Can't be leader
-						now.clientSetIsLeader(false);
-						now.clientSetSessionLeaderVideoControls(false);
-						now.clientSetUrl(null);
-						
+						console.log("Device "+cId+" in a session: "+sId);
 					}
-					// Device ended up not in a session box
-					else if(deviceSession == null) {
+					// Device ended up not in a session box, but started in a session
+					else if(deviceSession == null && this.checkDeviceInSession(startPoint) != null) {
 						
 						var prevSession = IGLoo.sId;
 						
 						// Remove device from its previous session
 						// request server to do the remove
 						// it's possible that server will choose not to commit the REMOVE
+						// IF: Not moving urself or not the leader
 						now.serverRemoveDeviceFromSession(IGLoo.cId, cId, function(aborted){
 							//abort callback
 							if(aborted) {
